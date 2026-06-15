@@ -254,6 +254,117 @@
         @media (max-width: 520px) {
             .bassito { height: 28vh; right: 0.5rem; }
         }
+
+        /* ── store modal ── */
+        .modal-overlay {
+            position: fixed;
+            inset: 0;
+            z-index: 100;
+            background: rgba(0,0,0,0.7);
+            backdrop-filter: blur(4px);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 1.5rem;
+            opacity: 0;
+            visibility: hidden;
+            transition: opacity 0.25s ease, visibility 0.25s ease;
+        }
+
+        .modal-overlay.open {
+            opacity: 1;
+            visibility: visible;
+        }
+
+        .modal-box {
+            position: relative;
+            width: 100%;
+            max-width: 380px;
+            background: #0a0a0a;
+            border: 1.5px solid var(--border);
+            border-radius: 16px;
+            padding: 2.25rem 1.75rem;
+            text-align: center;
+            transform: translateY(16px) scale(0.98);
+            transition: transform 0.25s ease;
+            box-shadow: 0 30px 80px rgba(0,0,0,0.6), 0 0 60px rgba(67,197,255,0.08);
+        }
+
+        .modal-overlay.open .modal-box {
+            transform: translateY(0) scale(1);
+        }
+
+        .modal-icon {
+            width: 48px;
+            height: 48px;
+            margin: 0 auto 1.25rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border-radius: 50%;
+            background: var(--p08);
+            border: 1.5px solid var(--border);
+            color: var(--p);
+        }
+
+        .modal-icon svg { width: 22px; height: 22px; }
+
+        .modal-title {
+            font-size: 1.15rem;
+            font-weight: 800;
+            letter-spacing: 0.02em;
+            margin-bottom: 0.6rem;
+        }
+
+        .modal-title span { color: var(--p); }
+
+        .modal-text {
+            font-size: 0.88rem;
+            color: var(--muted);
+            line-height: 1.6;
+            margin-bottom: 1.75rem;
+        }
+
+        .modal-close {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            padding: 0.8em 2.2em;
+            border-radius: 14px;
+            background: var(--p);
+            color: #000;
+            font-weight: 800;
+            font-size: 0.85rem;
+            letter-spacing: 0.08em;
+            text-transform: uppercase;
+            border: none;
+            cursor: pointer;
+            transition: opacity 0.2s, transform 0.2s;
+            font-family: 'Inter', sans-serif;
+        }
+
+        .modal-close:hover { opacity: 0.88; transform: translateY(-2px); }
+
+        .modal-dismiss {
+            position: absolute;
+            top: 0.9rem;
+            right: 0.9rem;
+            width: 30px;
+            height: 30px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border-radius: 50%;
+            border: 1px solid var(--border);
+            background: transparent;
+            color: var(--muted);
+            cursor: pointer;
+            transition: color 0.2s, border-color 0.2s;
+        }
+
+        .modal-dismiss:hover { color: #fff; border-color: var(--p); }
+
+        .modal-dismiss svg { width: 14px; height: 14px; }
     </style>
 </head>
 <body>
@@ -271,12 +382,12 @@
             <p class="event-teaser">Próximo evento <strong>08.08</strong> · Save the date</p>
 
             <div class="links">
-                <a class="link-btn accent" href="http://lojarunningbeat.com.br/" target="_blank" rel="noopener">
+                <button type="button" class="link-btn accent" id="store-btn">
                     <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
                         <path d="M6 2L3 6v14a2 2 0 002 2h14a2 2 0 002-2V6l-3-4z"/><line x1="3" y1="6" x2="21" y2="6"/><path d="M16 10a4 4 0 01-8 0"/>
                     </svg>
                     Acessar a Loja
-                </a>
+                </button>
                 <a class="link-btn" href="/sobre">
                     <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
                         <circle cx="12" cy="12" r="10"/><path d="M12 8v4m0 4h.01"/>
@@ -302,5 +413,38 @@
     </main>
 
     <p class="credit">Desenvolvido por <a href="https://siteswsa.com" target="_blank" rel="noopener">siteswsa.com</a></p>
+
+    <div class="modal-overlay" id="store-modal">
+        <div class="modal-box">
+            <button type="button" class="modal-dismiss" id="store-modal-close" aria-label="Fechar">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+            </button>
+            <div class="modal-icon">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><path d="M12 6v6l4 2"/></svg>
+            </div>
+            <p class="modal-title">Loja em <span>breve</span></p>
+            <p class="modal-text">Estamos preparando a primeira coleção da Running Beat. A loja online será lançada em breve — fica de olho no nosso Instagram para o aviso.</p>
+            <button type="button" class="modal-close" id="store-modal-ok">Entendi</button>
+        </div>
+    </div>
+
+    <script>
+        (function () {
+            const btn     = document.getElementById('store-btn');
+            const modal   = document.getElementById('store-modal');
+            const closeEl = document.getElementById('store-modal-close');
+            const okEl    = document.getElementById('store-modal-ok');
+            if (!btn || !modal) return;
+
+            const open  = () => modal.classList.add('open');
+            const close = () => modal.classList.remove('open');
+
+            btn.addEventListener('click', open);
+            closeEl.addEventListener('click', close);
+            okEl.addEventListener('click', close);
+            modal.addEventListener('click', (e) => { if (e.target === modal) close(); });
+            document.addEventListener('keydown', (e) => { if (e.key === 'Escape') close(); });
+        })();
+    </script>
 </body>
 </html>
