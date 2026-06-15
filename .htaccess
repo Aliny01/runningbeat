@@ -1,0 +1,10 @@
+RewriteEngine On
+
+# Redireciona /pagina.html -> /pagina (URL limpa)
+RewriteCond %{THE_REQUEST} /([^.]+)\.html[\s?] [NC]
+RewriteRule ^ /%1 [NC,L,R=301]
+
+# Serve o arquivo .html quando a URL não tem extensão
+RewriteCond %{REQUEST_FILENAME} !-d
+RewriteCond %{REQUEST_FILENAME}\.html -f
+RewriteRule ^([^.]+)$ $1.html [NC,L]
