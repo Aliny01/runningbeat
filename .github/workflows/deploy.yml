@@ -1,0 +1,32 @@
+name: Deploy to HostGator
+
+on:
+  push:
+    branches: [ main ]
+
+jobs:
+  ftp-deploy:
+    name: Deploy Site
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: FTP Deploy
+        uses: SamKirkland/FTP-Deploy-Action@v4.3.4
+        with:
+          server: ${{ secrets.FTP_SERVER }}
+          username: ${{ secrets.FTP_USERNAME }}
+          password: ${{ secrets.FTP_PASSWORD }}
+          server-dir: ./
+          exclude: |
+            .git*
+            .git*/**
+            .github/**
+            EPS/**
+            JPG/**
+            POSTS/**
+            CAMISETA RUNNING CLUB/**
+            BLACK AND WHITE/**
+            Banner.png
+            Design sem nome.png
