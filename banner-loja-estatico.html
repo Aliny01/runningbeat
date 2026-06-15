@@ -1,0 +1,227 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<title>Running Beat — Banner Loja</title>
+<style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+
+    html, body { background: #050505; }
+
+    body {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        min-height: 100vh;
+    }
+
+    .banner {
+        position: relative;
+        width: 1440px;
+        height: 600px;
+        background: #0a0a0a;
+        overflow: hidden;
+        color: #fff;
+        font-family: 'Inter', 'Helvetica Neue', Arial, sans-serif;
+    }
+
+    /* grain texture, igual ao resto do site */
+    .grain {
+        position: absolute;
+        inset: 0;
+        z-index: 50;
+        opacity: 0.05;
+        pointer-events: none;
+        background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='300' height='300'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.75' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='300' height='300' filter='url(%23n)'/%3E%3C/svg%3E");
+        background-size: 200px 200px;
+    }
+
+    /* divisor vertical sutil */
+    .divider {
+        position: absolute;
+        top: 64px;
+        bottom: 64px;
+        left: 46%;
+        width: 1px;
+        background: linear-gradient(to bottom, transparent, rgba(26,86,255,0.35), transparent);
+        z-index: 5;
+    }
+
+    /* ── coluna esquerda: texto ── */
+    .left {
+        position: absolute;
+        inset: 0;
+        width: 46%;
+        height: 100%;
+        padding: 56px 0 56px 72px;
+        display: flex;
+        flex-direction: column;
+        justify-content: space-between;
+        z-index: 10;
+    }
+
+    .eyebrow {
+        display: inline-flex;
+        align-items: center;
+        gap: 12px;
+        font-size: 12px;
+        font-weight: 600;
+        letter-spacing: 0.32em;
+        text-transform: uppercase;
+        color: rgba(255,255,255,0.55);
+    }
+
+    .eyebrow::before {
+        content: '';
+        display: block;
+        width: 28px;
+        height: 1px;
+        background: #1a56ff;
+    }
+
+    .title-block .label {
+        display: block;
+        font-size: 13px;
+        font-weight: 600;
+        letter-spacing: 0.3em;
+        text-transform: uppercase;
+        color: #1a56ff;
+        margin-bottom: 18px;
+    }
+
+    .title {
+        font-size: 92px;
+        font-weight: 800;
+        line-height: 1.02;
+        letter-spacing: -0.015em;
+        color: #ffffff;
+    }
+
+    .title .accent {
+        color: #1a56ff;
+        font-weight: 800;
+    }
+
+    .subtitle {
+        margin-top: 28px;
+        font-size: 19px;
+        font-weight: 400;
+        line-height: 1.6;
+        color: rgba(255,255,255,0.6);
+        max-width: 380px;
+    }
+
+    .bottom-row {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+    }
+
+    .cta {
+        display: inline-flex;
+        align-items: center;
+        gap: 14px;
+        font-size: 15px;
+        font-weight: 600;
+        letter-spacing: 0.12em;
+        text-transform: uppercase;
+        color: #ffffff;
+        text-decoration: none;
+        padding-bottom: 10px;
+        border-bottom: 1px solid #1a56ff;
+    }
+
+    .cta .arrow {
+        color: #1a56ff;
+        font-size: 18px;
+    }
+
+    .tag {
+        font-family: 'Courier New', Courier, monospace;
+        font-size: 12px;
+        letter-spacing: 0.22em;
+        text-transform: uppercase;
+        color: rgba(255,255,255,0.32);
+    }
+
+    /* ── coluna direita: produtos ── */
+    .right {
+        position: absolute;
+        inset: 0;
+        left: 46%;
+        width: 54%;
+        height: 100%;
+        z-index: 4;
+        overflow: hidden;
+    }
+
+    .glow {
+        position: absolute;
+        top: 50%;
+        left: 58%;
+        width: 620px;
+        height: 620px;
+        transform: translate(-50%, -50%);
+        border-radius: 50%;
+        background: radial-gradient(circle, rgba(26,86,255,0.16) 0%, rgba(26,86,255,0.05) 45%, transparent 72%);
+    }
+
+    .product {
+        position: absolute;
+    }
+
+    /* camiseta — peça hero, grande e centralizada */
+    .p-hero {
+        top: 50%;
+        left: 56%;
+        width: 480px;
+        transform: translate(-50%, -50%);
+        z-index: 2;
+        filter: drop-shadow(0 40px 60px rgba(0,0,0,0.6)) drop-shadow(0 0 50px rgba(26,86,255,0.12));
+    }
+
+    /* boné — peça de apoio, menor, sobreposta no canto inferior */
+    .p-cap {
+        bottom: 54px;
+        left: 38px;
+        width: 230px;
+        transform: rotate(-6deg);
+        z-index: 3;
+        filter: drop-shadow(0 25px 35px rgba(0,0,0,0.55));
+    }
+</style>
+</head>
+<body>
+
+    <div class="banner" id="banner">
+
+        <div class="divider"></div>
+
+        <div class="left">
+            <span class="eyebrow">Running Beat · Loja</span>
+
+            <div class="title-block">
+                <span class="label">Nova coleção</span>
+                <h1 class="title">
+                    Primeira<br><span class="accent">Coleção</span>
+                </h1>
+                <p class="subtitle">F*da-se o Pace. Vista o movimento.</p>
+            </div>
+
+            <div class="bottom-row">
+                <a class="cta" href="#">Ver coleção <span class="arrow">→</span></a>
+                <span class="tag">08.08 — Uberlândia, MG</span>
+            </div>
+        </div>
+
+        <div class="right">
+            <div class="glow"></div>
+            <img class="product p-hero" src="sem fundo/2.png" alt="Camiseta Running Beat">
+            <img class="product p-cap" src="sem fundo/6.png" alt="Boné Running Beat">
+        </div>
+
+        <div class="grain"></div>
+    </div>
+
+</body>
+</html>

@@ -1,0 +1,1429 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Running Beat — O Movimento</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Barlow+Condensed:wght@800;900&family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <style>
+        *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+
+        :root {
+            --p: #43C5FF;
+            --p15: rgba(67,197,255,0.15);
+            --p08: rgba(67,197,255,0.08);
+            --p04: rgba(67,197,255,0.04);
+            --border: rgba(67,197,255,0.18);
+            --muted: rgba(255,255,255,0.5);
+        }
+
+        html { scroll-behavior: smooth; }
+
+        body {
+            background: #000;
+            color: #fff;
+            font-family: 'Inter', sans-serif;
+            overflow-x: hidden;
+        }
+
+        /* grain overlay */
+        body::after {
+            content: '';
+            position: fixed;
+            inset: 0;
+            pointer-events: none;
+            z-index: 9998;
+            opacity: 0.04;
+            background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='300' height='300'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.75' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='300' height='300' filter='url(%23n)'/%3E%3C/svg%3E");
+            background-size: 200px 200px;
+        }
+
+        /* ── NAV ── */
+        nav {
+            position: fixed;
+            top: 0; left: 0; right: 0;
+            z-index: 500;
+            padding: 0.9rem 2rem;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            background: rgba(0,0,0,0.55);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            border-bottom: 1px solid rgba(255,255,255,0.05);
+        }
+
+        nav img { height: 48px; }
+
+        .nav-back {
+            display: flex;
+            align-items: center;
+            gap: 0.4rem;
+            color: var(--muted);
+            text-decoration: none;
+            font-size: 0.8rem;
+            font-weight: 500;
+            letter-spacing: 0.05em;
+            transition: color 0.2s;
+        }
+        .nav-back:hover { color: var(--p); }
+
+        /* ═══════════════════════════════
+           HERO
+        ═══════════════════════════════ */
+        .hero {
+            position: relative;
+            height: 100vh;
+            min-height: 620px;
+            display: flex;
+            align-items: center;
+            overflow: hidden;
+        }
+
+        /* — background layers — */
+        .hero-glow-center {
+            position: absolute;
+            top: 45%;
+            left: 50%;
+            width: 80vmax;
+            height: 80vmax;
+            background: radial-gradient(circle, rgba(67,197,255,0.10) 0%, rgba(67,197,255,0.03) 35%, transparent 65%);
+            transform: translate(-50%, -50%);
+            animation: breathe 9s ease-in-out infinite;
+            pointer-events: none;
+        }
+
+        .hero-glow-top {
+            position: absolute;
+            top: -15%;
+            right: -5%;
+            width: 55vmax;
+            height: 55vmax;
+            background: radial-gradient(circle, rgba(67,197,255,0.05) 0%, transparent 65%);
+            pointer-events: none;
+        }
+
+        /* rotating rays */
+        .hero-rays {
+            position: absolute;
+            top: 45%;
+            left: 50%;
+            width: 120vmax;
+            height: 120vmax;
+            transform: translate(-50%, -50%);
+            animation: spin 50s linear infinite;
+            pointer-events: none;
+            background: conic-gradient(
+                from 0deg,
+                transparent 0deg,   rgba(67,197,255,0.045) 3.5deg,  transparent 7deg,
+                transparent 14deg,  rgba(67,197,255,0.03)  17.5deg, transparent 21deg,
+                transparent 29deg,  rgba(67,197,255,0.055) 32deg,   transparent 35deg,
+                transparent 44deg,  rgba(67,197,255,0.025) 47deg,   transparent 51deg,
+                transparent 60deg,  rgba(67,197,255,0.04)  63deg,   transparent 67deg,
+                transparent 75deg,  rgba(67,197,255,0.035) 78deg,   transparent 82deg,
+                transparent 90deg,  rgba(67,197,255,0.05)  93deg,   transparent 97deg,
+                transparent 108deg, rgba(67,197,255,0.03)  112deg,  transparent 116deg,
+                transparent 125deg, rgba(67,197,255,0.04)  128deg,  transparent 132deg,
+                transparent 142deg, rgba(67,197,255,0.025) 145deg,  transparent 149deg,
+                transparent 158deg, rgba(67,197,255,0.05)  161deg,  transparent 165deg,
+                transparent 175deg, rgba(67,197,255,0.035) 178deg,  transparent 182deg,
+                transparent 192deg, rgba(67,197,255,0.045) 195deg,  transparent 199deg,
+                transparent 210deg, rgba(67,197,255,0.03)  213deg,  transparent 217deg,
+                transparent 227deg, rgba(67,197,255,0.055) 230deg,  transparent 234deg,
+                transparent 244deg, rgba(67,197,255,0.025) 247deg,  transparent 251deg,
+                transparent 260deg, rgba(67,197,255,0.04)  263deg,  transparent 267deg,
+                transparent 277deg, rgba(67,197,255,0.035) 280deg,  transparent 284deg,
+                transparent 293deg, rgba(67,197,255,0.05)  296deg,  transparent 300deg,
+                transparent 310deg, rgba(67,197,255,0.03)  313deg,  transparent 317deg,
+                transparent 326deg, rgba(67,197,255,0.04)  329deg,  transparent 333deg,
+                transparent 343deg, rgba(67,197,255,0.025) 346deg,  transparent 350deg,
+                transparent 360deg
+            );
+            border-radius: 50%;
+        }
+
+        /* ghost phrase */
+        .hero-bg-phrase {
+            position: absolute;
+            bottom: 6%;
+            left: 50%;
+            transform: translateX(-50%) rotate(-2.5deg);
+            font-family: 'Bebas Neue', sans-serif;
+            font-size: clamp(5rem, 17vw, 16rem);
+            letter-spacing: 0.06em;
+            white-space: nowrap;
+            color: #fff;
+            opacity: 0.022;
+            pointer-events: none;
+            user-select: none;
+            line-height: 1;
+        }
+
+        /* bottom fade overlay — sits above the mascot, below the text */
+        .hero::after {
+            content: '';
+            position: absolute;
+            inset: 0;
+            background: linear-gradient(to bottom, transparent 55%, rgba(0,0,0,0.92) 100%);
+            z-index: 8;
+            pointer-events: none;
+        }
+
+        /* particles container */
+        #hero-particles { position: absolute; inset: 0; pointer-events: none; }
+
+        .particle {
+            position: absolute;
+            border-radius: 50%;
+            background: var(--p);
+            opacity: 0;
+            animation: floatUp var(--dur, 7s) var(--delay, 0s) ease-in infinite;
+        }
+
+        @keyframes floatUp {
+            0%   { opacity: 0;          transform: translateY(0)     scale(1); }
+            15%  { opacity: var(--op, .35); }
+            85%  { opacity: var(--op, .15); }
+            100% { opacity: 0;          transform: translateY(-90vh) scale(0.2); }
+        }
+
+        /* main content */
+        .hero-inner {
+            z-index: 10;
+            padding: 0 2rem 0 clamp(1.5rem, 6vw, 6rem);
+            max-width: 720px;
+        }
+
+        .hero-logo {
+            width: 150px;
+            margin-bottom: 2.5rem;
+            filter: drop-shadow(0 0 28px rgba(67,197,255,0.55))
+                    drop-shadow(0 0 70px rgba(67,197,255,0.2));
+        }
+
+        .hero-eyebrow {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            font-size: 0.68rem;
+            letter-spacing: 0.28em;
+            text-transform: uppercase;
+            color: var(--p);
+            font-weight: 700;
+            margin-bottom: 1.1rem;
+        }
+
+        .hero-eyebrow::after {
+            content: '';
+            flex: 0 0 36px;
+            height: 1px;
+            background: var(--p);
+        }
+
+        .hero-h1 {
+            font-family: 'Bebas Neue', sans-serif;
+            font-size: clamp(3.8rem, 10vw, 8rem);
+            line-height: 0.88;
+            letter-spacing: 0.02em;
+            margin-bottom: 1.75rem;
+            text-shadow:
+                1px 1px 0 #0d4f6e,
+                2px 2px 0 #0d4f6e,
+                3px 3px 0 #0a3d56,
+                4px 4px 0 #072c3e,
+                5px 5px 12px rgba(67, 197, 255, 0.15);
+        }
+
+        .hero-mobile-br { display: none; }
+
+        .hero-h1 .accent {
+            color: var(--p);
+            text-shadow:
+                1px 1px 0 #0a3d56,
+                2px 2px 0 #072c3e,
+                3px 3px 0 #041e2a,
+                4px 4px 0 #020f15,
+                5px 5px 14px rgba(67, 197, 255, 0.35);
+        }
+
+        .hero-desc {
+            font-size: clamp(0.9rem, 1.5vw, 1.05rem);
+            color: var(--muted);
+            line-height: 1.8;
+            max-width: 380px;
+            margin-bottom: 2.25rem;
+        }
+
+        .hero-btn {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            padding: 0.9rem 2rem;
+            background: var(--p);
+            color: #000;
+            font-weight: 800;
+            font-size: 0.8rem;
+            letter-spacing: 0.1em;
+            text-transform: uppercase;
+            text-decoration: none;
+            border-radius: 8px;
+            transition: opacity 0.2s, transform 0.2s;
+        }
+
+        .hero-btn:hover { opacity: 0.88; transform: translateY(-2px); }
+
+        /* Bassito hero — desktop only */
+        .bassito-hero {
+            position: absolute;
+            right: 0;
+            bottom: 0;
+            height: 88%;
+            z-index: 5;
+            mix-blend-mode: screen;
+            filter: drop-shadow(0 0 50px rgba(67,197,255,0.28))
+                    drop-shadow(0 0 120px rgba(67,197,255,0.1));
+        }
+
+        @keyframes breathe { 0%,100% { transform: translate(-50%,-50%) scale(1); opacity:.7; } 50% { transform: translate(-50%,-50%) scale(1.09); opacity:1; } }
+        @keyframes spin { from { transform: translate(-50%,-50%) rotate(0deg); } to { transform: translate(-50%,-50%) rotate(360deg); } }
+
+        /* ═══════════════════════════════
+           TICKER
+        ═══════════════════════════════ */
+        .ticker-wrap {
+            overflow: hidden;
+            border-top: 1px solid rgba(67,197,255,0.14);
+            border-bottom: 1px solid rgba(67,197,255,0.14);
+            background: rgba(67,197,255,0.04);
+            padding: 0.65rem 0;
+        }
+
+        .ticker {
+            display: flex;
+            width: max-content;
+            animation: tickerScroll 22s linear infinite;
+        }
+
+        .ticker:hover { animation-play-state: paused; }
+
+        .t-item {
+            font-family: 'Bebas Neue', sans-serif;
+            font-size: 0.95rem;
+            letter-spacing: 0.16em;
+            color: var(--p);
+            padding: 0 1.75rem;
+            white-space: nowrap;
+            opacity: 0.85;
+        }
+
+        .t-sep { color: rgba(255,255,255,0.18); }
+
+        @keyframes tickerScroll { from { transform: translateX(0); } to { transform: translateX(-50%); } }
+
+        /* ═══════════════════════════════
+           DIVIDER
+        ═══════════════════════════════ */
+        .divider {
+            height: 1px;
+            background: linear-gradient(to right, transparent, rgba(67,197,255,0.2), transparent);
+        }
+
+        /* ═══════════════════════════════
+           O MOVIMENTO (2-col)
+        ═══════════════════════════════ */
+        .section-movimento {
+            position: relative;
+            overflow: hidden;
+        }
+
+        .section-movimento::before {
+            content: '';
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            width: min(700px, 85%);
+            aspect-ratio: 1 / 0.6;
+            background: url('PNG/logotipo running beat cor primaria com fundo preto.png') center / contain no-repeat;
+            opacity: 0.07;
+            mix-blend-mode: screen;
+            pointer-events: none;
+        }
+
+        .section-movimento-inner {
+            position: relative;
+            z-index: 2;
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 8rem clamp(1.5rem, 6vw, 6rem);
+            display: grid;
+            grid-template-columns: 1fr 1.05fr;
+            gap: clamp(2.5rem, 6vw, 5rem);
+            align-items: center;
+        }
+
+        /* ── colagem de fotos do evento ── */
+        .mov-gallery {
+            position: relative;
+            display: grid;
+            grid-template-columns: 1.2fr 1fr;
+            grid-template-rows: 1fr 1fr;
+            gap: 1rem;
+            height: clamp(360px, 50vw, 520px);
+        }
+
+        .mov-gallery img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            border-radius: 16px;
+            border: 1px solid var(--border);
+            filter: saturate(1.05) contrast(1.05);
+            box-shadow: 0 20px 50px rgba(0,0,0,0.5);
+        }
+
+        .mov-gallery .mg-main {
+            grid-row: 1 / 3;
+            filter: grayscale(1) contrast(1.05);
+        }
+
+
+        .mov-bg-logo {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            width: min(700px, 80%);
+            opacity: 0.055;
+            mix-blend-mode: screen;
+            pointer-events: none;
+            user-select: none;
+            filter: blur(1px);
+        }
+
+        .big-type {
+            font-family: 'Bebas Neue', sans-serif;
+            font-size: clamp(5rem, 11vw, 10rem);
+            line-height: 0.83;
+            letter-spacing: 0.01em;
+            position: relative;
+            z-index: 1;
+        }
+
+        .bt-ghost {
+            -webkit-text-stroke: 1px rgba(67,197,255,0.3);
+            color: transparent;
+            display: block;
+        }
+
+        .bt-solid {
+            color: var(--p);
+            display: block;
+        }
+
+        .mov-right .lbl {
+            font-size: 0.68rem;
+            letter-spacing: 0.26em;
+            text-transform: uppercase;
+            color: var(--p);
+            font-weight: 700;
+            margin-bottom: 1.1rem;
+            display: flex;
+            align-items: center;
+            gap: 0.7rem;
+        }
+
+        .mov-right .lbl::before {
+            content: '';
+            flex: 0 0 28px;
+            height: 1px;
+            background: var(--p);
+        }
+
+        .mov-right h2 {
+            font-family: 'Bebas Neue', sans-serif;
+            font-size: clamp(2.2rem, 4.5vw, 4rem);
+            line-height: 0.95;
+            margin-bottom: 1.6rem;
+        }
+
+        .mov-right p {
+            color: var(--muted);
+            font-size: 1rem;
+            line-height: 1.88;
+            margin-bottom: 1rem;
+        }
+
+        .hl { color: var(--p); font-weight: 600; }
+
+        .mov-more-btn { display: none; }
+
+        @media (max-width: 900px) {
+            .mov-more {
+                max-height: 0;
+                overflow: hidden;
+                transition: max-height 0.4s ease;
+            }
+
+            .mov-more.open {
+                max-height: 600px;
+            }
+
+            .mov-more-btn {
+                display: inline-flex;
+                align-items: center;
+                gap: 0.4rem;
+                margin-top: 0.25rem;
+                background: none;
+                border: none;
+                color: var(--p);
+                font-weight: 700;
+                font-size: 0.8rem;
+                letter-spacing: 0.12em;
+                text-transform: uppercase;
+                cursor: pointer;
+                padding: 0;
+            }
+
+            .mov-more-btn svg {
+                transition: transform 0.3s ease;
+            }
+
+            .mov-more-btn.open svg {
+                transform: rotate(180deg);
+            }
+        }
+
+        /* ═══════════════════════════════
+           PACE STATEMENT
+        ═══════════════════════════════ */
+        .section-pace {
+            position: relative;
+            padding: 7rem 2rem;
+            text-align: center;
+            overflow: hidden;
+        }
+
+        /* faint Bassito watermark */
+        .section-pace::before {
+            content: '';
+            position: absolute;
+            top: 50%;
+            right: 8%;
+            transform: translateY(-50%);
+            width: min(380px, 40vw);
+            height: min(380px, 40vw);
+            background: url('BASSITO/BASSITO mascote running beat.png') center / contain no-repeat;
+            opacity: 0.04;
+            pointer-events: none;
+        }
+
+        .section-pace::after {
+            content: '';
+            position: absolute;
+            inset: 0;
+            background:
+                linear-gradient(to bottom, #000 0%, transparent 18%, transparent 82%, #000 100%),
+                radial-gradient(ellipse 80% 60% at 50% 50%, rgba(67,197,255,0.07) 0%, transparent 100%);
+            pointer-events: none;
+        }
+
+        .pace-stack {
+            font-family: 'Barlow Condensed', sans-serif;
+            font-weight: 900;
+            font-size: clamp(4rem, 16vw, 13rem);
+            line-height: 0.9;
+            letter-spacing: 0.02em;
+            text-transform: uppercase;
+            position: relative;
+            z-index: 2;
+        }
+
+        .pace-l1 { display: block; color: rgba(255,255,255,0.06); }
+        .pace-l2 { display: block; color: #ffffff; }
+        .pace-l3 { display: block; color: var(--p); text-shadow: 0 0 80px rgba(67,197,255,0.35); }
+
+        .pace-copy {
+            margin-top: 1.75rem;
+            font-size: clamp(0.9rem, 1.8vw, 1.1rem);
+            color: var(--muted);
+            max-width: 400px;
+            margin-left: auto;
+            margin-right: auto;
+            line-height: 1.75;
+            position: relative;
+            z-index: 2;
+        }
+
+        /* ═══════════════════════════════
+           VALORES
+        ═══════════════════════════════ */
+        .section-valores-wrap {
+            position: relative;
+            overflow: hidden;
+        }
+
+        .valores-bg {
+            position: absolute;
+            inset: 0;
+            background: url('PNG/foto2.jpg') center / cover no-repeat;
+            opacity: 0.1;
+            filter: grayscale(0.4);
+            -webkit-mask-image: linear-gradient(to bottom, transparent, black 25%, black 75%, transparent);
+            mask-image: linear-gradient(to bottom, transparent, black 25%, black 75%, transparent);
+            pointer-events: none;
+            z-index: 0;
+        }
+
+        .section-valores {
+            position: relative;
+            z-index: 1;
+            padding: 8rem clamp(1.5rem, 6vw, 6rem);
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .valores-head {
+            margin-bottom: 3rem;
+        }
+
+        .valores-head .lbl {
+            font-size: 0.68rem;
+            letter-spacing: 0.26em;
+            text-transform: uppercase;
+            color: var(--p);
+            font-weight: 700;
+            margin-bottom: 0.75rem;
+        }
+
+        .valores-head h2 {
+            font-family: 'Bebas Neue', sans-serif;
+            font-size: clamp(2.5rem, 6vw, 5rem);
+            letter-spacing: 0.02em;
+            line-height: 0.92;
+        }
+
+        .valores-grid {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            border: 1px solid var(--border);
+            border-radius: 20px;
+            overflow: hidden;
+        }
+
+        .v-card {
+            position: relative;
+            padding: 2rem 1.5rem 1.75rem;
+            background: rgba(255,255,255,0.018);
+            overflow: hidden;
+            transition: background 0.3s;
+        }
+
+        .v-card + .v-card { border-left: 1px solid var(--border); }
+
+        .v-card::before {
+            content: '';
+            position: absolute;
+            inset: 0;
+            background: linear-gradient(135deg, rgba(67,197,255,0.08) 0%, transparent 55%);
+            opacity: 0;
+            transition: opacity 0.3s;
+        }
+
+        .v-card:hover::before { opacity: 1; }
+        .v-card:hover { background: rgba(67,197,255,0.04); }
+
+        .v-bg-num {
+            position: absolute;
+            top: -0.75rem;
+            right: -0.5rem;
+            font-family: 'Bebas Neue', sans-serif;
+            font-size: 7rem;
+            line-height: 1;
+            color: rgba(67,197,255,0.045);
+            user-select: none;
+            pointer-events: none;
+        }
+
+        .v-num {
+            font-family: 'Bebas Neue', sans-serif;
+            font-size: 0.8rem;
+            color: var(--p);
+            letter-spacing: 0.12em;
+            margin-bottom: 1.1rem;
+            position: relative;
+            z-index: 1;
+        }
+
+        .v-title {
+            font-family: 'Bebas Neue', sans-serif;
+            font-size: 1.5rem;
+            letter-spacing: 0.02em;
+            line-height: 1.1;
+            margin-bottom: 0.75rem;
+            position: relative;
+            z-index: 1;
+        }
+
+        .v-desc {
+            font-size: 0.83rem;
+            color: var(--muted);
+            line-height: 1.6;
+            position: relative;
+            z-index: 1;
+        }
+
+        /* ═══════════════════════════════
+           EVENTO
+        ═══════════════════════════════ */
+        .section-evento {
+            position: relative;
+            padding: 8rem 2rem 6rem;
+            text-align: center;
+            overflow: hidden;
+        }
+
+        .event-glow {
+            position: absolute;
+            bottom: -30%;
+            left: 50%;
+            width: 90vmax;
+            height: 65vmax;
+            background: radial-gradient(ellipse, rgba(67,197,255,0.09) 0%, transparent 65%);
+            transform: translateX(-50%);
+            pointer-events: none;
+            animation: breathe 8s ease-in-out infinite;
+        }
+
+        /* dot-grid backdrop, evocando o "mapa" da referência */
+        .event-dotgrid {
+            position: absolute;
+            inset: 0;
+            background-image: radial-gradient(rgba(67,197,255,0.22) 1px, transparent 1px);
+            background-size: 34px 34px;
+            -webkit-mask-image: radial-gradient(ellipse 70% 55% at 50% 45%, black 0%, transparent 75%);
+            mask-image: radial-gradient(ellipse 70% 55% at 50% 45%, black 0%, transparent 75%);
+            opacity: 0.5;
+            pointer-events: none;
+            z-index: 1;
+        }
+
+        /* anéis tipo "globo wireframe" atrás do 08·08 */
+        .event-orbit {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            width: clamp(420px, 62vw, 780px);
+            height: clamp(420px, 62vw, 780px);
+            transform: translate(-50%, -50%);
+            border: 1px dashed rgba(67,197,255,0.18);
+            border-radius: 50%;
+            pointer-events: none;
+            z-index: 1;
+            animation: orbitSpin 70s linear infinite;
+        }
+
+        .event-orbit::before {
+            content: '';
+            position: absolute;
+            inset: 9%;
+            border: 1px solid rgba(67,197,255,0.1);
+            border-radius: 50%;
+        }
+
+        .event-orbit::after {
+            content: '';
+            position: absolute;
+            inset: 19%;
+            border: 1px dashed rgba(67,197,255,0.08);
+            border-radius: 50%;
+        }
+
+        @keyframes orbitSpin { to { transform: translate(-50%, -50%) rotate(360deg); } }
+
+        /* soundwave / equalizer ao lado do 08·08 */
+        .event-wave {
+            position: absolute;
+            top: 50%;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            height: 130px;
+            transform: translateY(-50%);
+            z-index: 2;
+            opacity: 0.8;
+            pointer-events: none;
+        }
+
+        .event-wave.left  { left: clamp(0.5rem, 5vw, 6rem); }
+        .event-wave.right { right: clamp(0.5rem, 5vw, 6rem); }
+
+        .event-wave span {
+            display: block;
+            width: 4px;
+            border-radius: 3px;
+            background: var(--p);
+            box-shadow: 0 0 12px rgba(67,197,255,0.6);
+            animation: eqPulse 1.2s ease-in-out infinite;
+            transform-origin: center;
+        }
+
+        .event-wave span:nth-child(1)  { height: 30%; animation-delay: 0.0s; }
+        .event-wave span:nth-child(2)  { height: 65%; animation-delay: 0.15s; }
+        .event-wave span:nth-child(3)  { height: 100%; animation-delay: 0.3s; }
+        .event-wave span:nth-child(4)  { height: 45%; animation-delay: 0.45s; }
+        .event-wave span:nth-child(5)  { height: 80%; animation-delay: 0.6s; }
+        .event-wave span:nth-child(6)  { height: 25%; animation-delay: 0.75s; }
+        .event-wave span:nth-child(7)  { height: 55%; animation-delay: 0.9s; }
+        .event-wave span:nth-child(8)  { height: 70%; animation-delay: 1.05s; }
+        .event-wave span:nth-child(9)  { height: 40%; animation-delay: 1.2s; }
+        .event-wave span:nth-child(10) { height: 90%; animation-delay: 1.35s; }
+
+        @keyframes eqPulse {
+            0%, 100% { transform: scaleY(0.35); opacity: 0.6; }
+            50%      { transform: scaleY(1); opacity: 1; }
+        }
+
+        /* sparkle decorativo */
+        .event-spark {
+            position: absolute;
+            top: 10%;
+            right: 9%;
+            font-size: 1.3rem;
+            color: var(--p);
+            opacity: 0.5;
+            z-index: 2;
+            pointer-events: none;
+            animation: sparkPulse 3s ease-in-out infinite;
+        }
+
+        @keyframes sparkPulse {
+            0%, 100% { opacity: 0.25; transform: scale(0.85); }
+            50%      { opacity: 0.8; transform: scale(1.1); }
+        }
+
+        @media (max-width: 900px) {
+            .event-orbit { display: none; }
+
+            .event-wave {
+                height: 70px;
+                gap: 3px;
+                opacity: 0.6;
+            }
+
+            .event-wave span { width: 2.5px; }
+
+            .event-wave.left  { left: 0.4rem; }
+            .event-wave.right { right: 0.4rem; }
+        }
+
+        .event-lbl {
+            font-size: 0.68rem;
+            letter-spacing: 0.32em;
+            text-transform: uppercase;
+            color: var(--p);
+            font-weight: 700;
+            margin-bottom: 1.25rem;
+            position: relative;
+            z-index: 2;
+        }
+
+        .event-date-wrap {
+            position: relative;
+            z-index: 2;
+            line-height: 0.85;
+        }
+
+        .event-date {
+            font-family: 'Bebas Neue', sans-serif;
+            font-size: clamp(7rem, 32vw, 20rem);
+            letter-spacing: 0.01em;
+            color: #fff;
+        }
+
+        .event-sep {
+            color: var(--p);
+            display: inline-block;
+            text-shadow: 0 0 60px rgba(67,197,255,0.8), 0 0 120px rgba(67,197,255,0.3);
+            animation: sepPulse 2.5s ease-in-out infinite;
+        }
+
+        @keyframes sepPulse {
+            0%,100% { text-shadow: 0 0 60px rgba(67,197,255,.8), 0 0 120px rgba(67,197,255,.3); opacity:1; }
+            50%      { text-shadow: 0 0 20px rgba(67,197,255,.3); opacity:.65; }
+        }
+
+        .event-meta {
+            margin-top: 1.75rem;
+            font-size: 0.88rem;
+            color: var(--muted);
+            letter-spacing: 0.14em;
+            text-transform: uppercase;
+            position: relative;
+            z-index: 2;
+        }
+
+        .event-cta {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            margin-top: 2.75rem;
+            padding: 1rem 2.5rem;
+            border: 1.5px solid var(--p);
+            border-radius: 50px;
+            color: var(--p);
+            font-weight: 700;
+            font-size: 0.82rem;
+            letter-spacing: 0.1em;
+            text-transform: uppercase;
+            text-decoration: none;
+            position: relative;
+            z-index: 2;
+            overflow: hidden;
+            transition: color 0.3s;
+        }
+
+        .event-cta::before {
+            content: '';
+            position: absolute;
+            inset: 0;
+            background: var(--p);
+            transform: scaleX(0);
+            transform-origin: left;
+            transition: transform 0.3s ease;
+            z-index: -1;
+        }
+
+        .event-cta:hover::before { transform: scaleX(1); }
+        .event-cta:hover { color: #000; }
+
+        /* ═══════════════════════════════
+           FOOTER CTA
+        ═══════════════════════════════ */
+        .section-footer {
+            padding: 5rem 2rem 4rem;
+            text-align: center;
+            border-top: 1px solid rgba(255,255,255,0.05);
+        }
+
+        .footer-headline {
+            font-family: 'Bebas Neue', sans-serif;
+            font-size: clamp(2.2rem, 6vw, 4.5rem);
+            letter-spacing: 0.03em;
+            line-height: 1;
+            margin-bottom: 0.5rem;
+        }
+
+        .footer-headline span { color: var(--p); }
+
+        .footer-sub {
+            font-size: 0.92rem;
+            color: var(--muted);
+            margin-bottom: 2.5rem;
+        }
+
+        /* ── SIGNUP FORM ── */
+        .signup-form {
+            max-width: 440px;
+            margin: 0 auto 1rem;
+            display: flex;
+            flex-direction: column;
+            gap: 0.75rem;
+        }
+
+        .signup-form input {
+            width: 100%;
+            padding: 1rem 1.25rem;
+            background: rgba(255,255,255,0.04);
+            border: 1.5px solid rgba(67,197,255,0.25);
+            border-radius: 12px;
+            color: #fff;
+            font-family: 'Inter', sans-serif;
+            font-size: 0.92rem;
+            outline: none;
+            transition: border-color 0.2s, background 0.2s;
+        }
+
+        .signup-form input::placeholder { color: rgba(255,255,255,0.35); }
+
+        .signup-form input:focus {
+            border-color: var(--p);
+            background: rgba(67,197,255,0.06);
+        }
+
+        .signup-form button {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 0.5rem;
+            padding: 1rem 1.5rem;
+            background: var(--p);
+            color: #000;
+            border: none;
+            border-radius: 12px;
+            font-family: 'Inter', sans-serif;
+            font-weight: 800;
+            font-size: 0.85rem;
+            letter-spacing: 0.08em;
+            text-transform: uppercase;
+            cursor: pointer;
+            transition: opacity 0.2s, transform 0.2s;
+        }
+
+        .signup-form button:hover { opacity: 0.88; transform: translateY(-2px); }
+        .signup-form button:active { transform: translateY(0); }
+
+        .signup-msg {
+            max-width: 440px;
+            margin: 0 auto 2.5rem;
+            padding: 1rem 1.25rem;
+            border: 1.5px solid var(--p);
+            border-radius: 12px;
+            background: rgba(67,197,255,0.08);
+            color: var(--p);
+            font-size: 0.9rem;
+            font-weight: 600;
+        }
+
+        .signup-disclaimer {
+            font-size: 0.74rem;
+            color: rgba(255,255,255,0.3);
+            margin: -0.25rem auto 2.5rem;
+            max-width: 440px;
+        }
+
+        .footer-links {
+            display: flex;
+            justify-content: center;
+            gap: 0.65rem;
+            flex-wrap: wrap;
+            margin-bottom: 3rem;
+        }
+
+        .f-link {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.4rem;
+            padding: 0.8rem 1.6rem;
+            border: 1px solid rgba(255,255,255,0.1);
+            border-radius: 10px;
+            color: rgba(255,255,255,0.65);
+            text-decoration: none;
+            font-size: 0.84rem;
+            font-weight: 500;
+            letter-spacing: 0.02em;
+            transition: border-color 0.2s, color 0.2s;
+        }
+
+        .f-link:hover { border-color: var(--p); color: var(--p); }
+
+        .f-link.accent {
+            background: var(--p);
+            border-color: var(--p);
+            color: #000;
+            font-weight: 800;
+        }
+
+        .f-link.accent:hover { opacity: 0.88; }
+
+        .copyright {
+            font-size: 0.66rem;
+            color: rgba(255,255,255,0.16);
+            letter-spacing: 0.14em;
+            text-transform: uppercase;
+        }
+
+        .credit {
+            position: relative;
+            z-index: 10;
+            text-align: center;
+            padding: 1rem 0 1.25rem;
+            font-size: 0.62rem;
+            color: rgba(255, 255, 255, 0.12);
+            letter-spacing: 0.08em;
+        }
+
+        .credit a {
+            color: inherit;
+            text-decoration: none;
+        }
+
+        .credit a:hover { color: rgba(255, 255, 255, 0.25); }
+
+        /* ═══════════════════════════════
+           SCROLL REVEAL
+        ═══════════════════════════════ */
+        .reveal {
+            opacity: 0;
+            transform: translateY(28px);
+            transition: opacity 0.75s ease, transform 0.75s ease;
+        }
+
+        .reveal.in { opacity: 1; transform: translateY(0); }
+
+        .reveal-delay-1 { transition-delay: 0.1s; }
+        .reveal-delay-2 { transition-delay: 0.2s; }
+        .reveal-delay-3 { transition-delay: 0.3s; }
+
+        /* ═══════════════════════════════
+           RESPONSIVE
+        ═══════════════════════════════ */
+        @media (max-width: 900px) {
+            .section-pace {
+                padding: 3rem 2rem;
+            }
+
+            .section-evento {
+                padding: 3rem 1.5rem 2.5rem;
+            }
+
+            .section-footer {
+                padding: 3rem 1.5rem;
+            }
+
+            .hero-logo { display: none; }
+
+            .hero {
+                height: auto;
+                min-height: 100vh;
+                align-items: stretch;
+                padding-top: 6rem;
+            }
+
+            .hero-inner {
+                display: flex;
+                flex-direction: column;
+                padding-bottom: 2.5rem;
+            }
+
+            .hero-h1 {
+                font-size: clamp(3.2rem, 15vw, 5.2rem);
+                margin-bottom: 1.1rem;
+            }
+
+            .hero-mobile-br { display: block; }
+
+            .hero-eyebrow { margin-bottom: 0.85rem; }
+
+            .hero-desc {
+                font-size: 0.85rem;
+                line-height: 1.65;
+                margin-bottom: 0;
+            }
+
+            .bassito-hero {
+                position: relative;
+                display: block;
+                height: 280px;
+                width: auto;
+                margin: -0.5rem -1.75rem 1rem auto;
+                z-index: 1;
+            }
+
+            .hero-btn {
+                width: 100%;
+                justify-content: center;
+                padding: 1.1rem;
+                border-radius: 12px;
+                font-size: 0.9rem;
+            }
+
+            .section-movimento-inner {
+                grid-template-columns: 1fr;
+                padding: 3rem 1.5rem;
+                gap: 2.5rem;
+            }
+
+            .mov-gallery {
+                height: 380px;
+                order: -1;
+            }
+
+            .valores-grid {
+                grid-template-columns: 1fr 1fr;
+            }
+
+            .v-card + .v-card { border-left: none; }
+            .v-card:nth-child(3), .v-card:nth-child(4) { border-top: 1px solid var(--border); }
+            .v-card:nth-child(2) { border-left: 1px solid var(--border); }
+            .v-card:nth-child(4) { border-left: 1px solid var(--border); }
+
+            .section-valores {
+                padding: 3rem 1.5rem;
+            }
+        }
+
+        @media (max-width: 520px) {
+            .valores-grid { grid-template-columns: 1fr; }
+            .v-card + .v-card { border-left: none; border-top: 1px solid var(--border); }
+            .hero-inner { padding: 0 1.5rem; }
+        }
+    </style>
+</head>
+<body>
+
+    <!-- NAV -->
+    <nav>
+        <img src="TRANSPARENTE/logo horizontal1.png" alt="Running Beat">
+        <a class="nav-back" href="index.html">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="15 18 9 12 15 6"/></svg>
+            Voltar
+        </a>
+    </nav>
+
+    <!-- ══════════════════ HERO ══════════════════ -->
+    <section class="hero">
+        <div class="hero-glow-center"></div>
+        <div class="hero-glow-top"></div>
+        <div class="hero-rays"></div>
+        <div id="hero-particles"></div>
+        <div class="hero-bg-phrase">F*DA-SE O PACE</div>
+
+        <div class="hero-inner">
+            <img class="hero-logo" src="TRANSPARENTE/logotipo running beat branca com fundo transparente.png" alt="Running Beat">
+            <span class="hero-eyebrow">O movimento</span>
+            <h1 class="hero-h1">
+                Não é uma<br>
+                <span class="accent">corrida.</span><br>
+                É um<br class="hero-mobile-br"> movimento.
+            </h1>
+            <p class="hero-desc">O maior movimento de corrida<br class="hero-mobile-br"> de Uberlândia está de volta<br class="hero-mobile-br"> para a segunda edição.</p>
+
+            <img class="bassito-hero" src="BASSITO/BASSITO mascote running beat em 3d - Editado.png" alt="Bassito">
+
+            <a class="hero-btn" href="#movimento">
+                Conheça
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg>
+            </a>
+        </div>
+    </section>
+
+    <!-- ══════════════════ TICKER ══════════════════ -->
+    <div class="ticker-wrap">
+        <div class="ticker" aria-hidden="true">
+            <span class="t-item">RUNNING BEAT</span><span class="t-item t-sep">·</span>
+            <span class="t-item">F*DA-SE O PACE</span><span class="t-item t-sep">·</span>
+            <span class="t-item">UBERLÂNDIA</span><span class="t-item t-sep">·</span>
+            <span class="t-item">08 · 08</span><span class="t-item t-sep">·</span>
+            <span class="t-item">SAVE THE DATE</span><span class="t-item t-sep">·</span>
+            <span class="t-item">NÃO É UMA CORRIDA</span><span class="t-item t-sep">·</span>
+            <span class="t-item">É UM MOVIMENTO</span><span class="t-item t-sep">·</span>
+            <!-- duplicate for seamless loop -->
+            <span class="t-item">RUNNING BEAT</span><span class="t-item t-sep">·</span>
+            <span class="t-item">F*DA-SE O PACE</span><span class="t-item t-sep">·</span>
+            <span class="t-item">UBERLÂNDIA</span><span class="t-item t-sep">·</span>
+            <span class="t-item">08 · 08</span><span class="t-item t-sep">·</span>
+            <span class="t-item">SAVE THE DATE</span><span class="t-item t-sep">·</span>
+            <span class="t-item">NÃO É UMA CORRIDA</span><span class="t-item t-sep">·</span>
+            <span class="t-item">É UM MOVIMENTO</span><span class="t-item t-sep">·</span>
+        </div>
+    </div>
+
+    <!-- ══════════════════ EVENTO ══════════════════ -->
+    <div class="section-evento">
+        <div class="event-glow"></div>
+        <div class="event-dotgrid"></div>
+        <div class="event-orbit"></div>
+        <div class="event-wave left">
+            <span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span>
+        </div>
+        <div class="event-wave right">
+            <span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span>
+        </div>
+        <span class="event-spark">✦</span>
+        <p class="event-lbl reveal">Save the Date</p>
+        <div class="event-date-wrap reveal">
+            <span class="event-date">08<span class="event-sep">·</span>08</span>
+        </div>
+        <p class="event-meta reveal">Uberlândia · MG · Em breve mais detalhes</p>
+        <a class="event-cta reveal reveal-delay-1" href="https://www.instagram.com/runningbeatudia/" target="_blank" rel="noopener">
+            <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <rect x="2" y="2" width="20" height="20" rx="5" ry="5"/><path d="M16 11.37A4 4 0 1112.63 8 4 4 0 0116 11.37z"/><line x1="17.5" y1="6.5" x2="17.51" y2="6.5"/>
+            </svg>
+            Acompanhe no Instagram
+        </a>
+    </div>
+
+    <div class="divider"></div>
+
+    <!-- ══════════════════ F*DA-SE O PACE ══════════════════ -->
+    <div class="section-pace">
+        <div class="pace-stack reveal">
+            <span class="pace-l1">F*DA-SE</span>
+            <span class="pace-l2">F*DA-SE</span>
+            <span class="pace-l3">O PACE</span>
+        </div>
+        <p class="pace-copy reveal reveal-delay-1">
+            Aqui o único ritmo que importa é o da música.<br>
+            Corra no seu tempo, celebre do seu jeito.
+        </p>
+    </div>
+
+    <div class="divider"></div>
+
+    <!-- ══════════════════ QUEM SOMOS ══════════════════ -->
+    <div id="movimento" class="section-movimento">
+        <div class="section-movimento-inner">
+<div class="mov-gallery reveal">
+            <img class="mg-main" src="PNG/foto1.jpg" alt="Grupo correndo durante a corrida da Running Beat">
+            <img class="mg-top" src="PNG/foto2.jpg" alt="Participantes se cumprimentando durante a corrida">
+            <img class="mg-bottom" src="PNG/foto3.JPG" alt="DJ tocando durante o evento Running Beat">
+        </div>
+<div class="mov-right">
+            <p class="lbl reveal">O movimento</p>
+            <h2 class="reveal reveal-delay-1">Quem<br>somos</h2>
+            <p class="reveal reveal-delay-2">Running Beat nasceu em <span class="hl">Uberlândia</span> com uma missão simples e poderosa: provar que correr pode ser incrível, inclusivo e ao som de uma trilha que faz a cidade vibrar.</p>
+            <div class="mov-more" id="mov-more">
+                <p class="reveal reveal-delay-2">Aqui não tem pace obrigatório, não tem quem chega primeiro e não tem quem chega por último. Tem gente, tem música e tem muito movimento.</p>
+                <p class="reveal reveal-delay-3">Somos uma comunidade. Uma celebração. Uma experiência que você carrega no corpo e na memória muito depois de cruzar a linha de chegada — ou de parar onde quiser.</p>
+            </div>
+            <button class="mov-more-btn" id="mov-more-btn" type="button">
+                Ver mais
+                <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg>
+            </button>
+        </div>
+        </div>
+    </div>
+
+    <div class="divider"></div>
+
+    <!-- ══════════════════ VALORES ══════════════════ -->
+    <div class="section-valores-wrap">
+        <div class="valores-bg"></div>
+        <div class="section-valores">
+        <div class="valores-head reveal">
+            <p class="lbl">O que nos move</p>
+            <h2>Nossos<br>pilares</h2>
+        </div>
+        <div class="valores-grid reveal">
+            <div class="v-card">
+                <div class="v-bg-num">01</div>
+                <div class="v-num">01</div>
+                <div class="v-title">Foda-se<br>o Pace</div>
+                <p class="v-desc">Sem pressão de tempo. Cada um no seu ritmo, todos no mesmo movimento.</p>
+            </div>
+            <div class="v-card">
+                <div class="v-bg-num">02</div>
+                <div class="v-num">02</div>
+                <div class="v-title">Música no<br>Caminho</div>
+                <p class="v-desc">A trilha sonora faz parte da corrida. É o que transforma quilômetros em memória.</p>
+            </div>
+            <div class="v-card">
+                <div class="v-bg-num">03</div>
+                <div class="v-num">03</div>
+                <div class="v-title">Chegamos<br>Juntos</div>
+                <p class="v-desc">Ninguém fica para trás. Running Beat é sobre comunidade, não competição.</p>
+            </div>
+            <div class="v-card">
+                <div class="v-bg-num">04</div>
+                <div class="v-num">04</div>
+                <div class="v-title">Uberlândia<br>nas Ruas</div>
+                <p class="v-desc">Nossa cidade é o palco. Cada edição é uma nova forma de vivê-la.</p>
+            </div>
+        </div>
+        </div>
+    </div>
+
+    <div class="divider"></div>
+
+    <!-- ══════════════════ FOOTER CTA ══════════════════ -->
+    <div class="section-footer">
+        <h2 class="footer-headline reveal">Faça parte do<br><span>movimento</span></h2>
+        <p class="footer-sub reveal">Quer saber a data e o local do próximo evento em primeira mão? Cadastre-se abaixo.</p>
+
+        <!--
+            CONFIGURAÇÃO DO FORMULÁRIO (Google Forms):
+            1. Crie um Google Form com 2 perguntas: "Nome" e "E-mail".
+            2. No Form, clique nos 3 pontinhos > "Obter link pré-preenchido".
+            3. Preencha os campos com qualquer valor e clique em "Obter link".
+            4. O link gerado terá algo como:
+               https://docs.google.com/forms/d/e/XXXXXXX/viewform?usp=pp_url&entry.111111=NOME&entry.222222=EMAIL
+            5. Substitua abaixo:
+               - YOUR_FORM_ID  -> o trecho "XXXXXXX" da URL (entre /d/e/ e /viewform)
+               - entry.NOME_ID -> o "entry.111111" referente ao campo Nome
+               - entry.EMAIL_ID -> o "entry.222222" referente ao campo E-mail
+        -->
+        <form class="signup-form reveal" id="signup-form"
+              action="https://docs.google.com/forms/d/e/YOUR_FORM_ID/formResponse"
+              method="POST" target="hidden_iframe">
+            <input type="text" name="entry.NOME_ID" placeholder="Seu nome" required>
+            <input type="email" name="entry.EMAIL_ID" placeholder="Seu e-mail" required>
+            <button type="submit">
+                Quero saber primeiro
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg>
+            </button>
+        </form>
+        <iframe name="hidden_iframe" style="display:none;" title="form-target"></iframe>
+        <p class="signup-msg reveal" id="signup-msg" style="display:none;">Cadastro feito! Você vai ser avisado(a) assim que tivermos novidades do próximo evento. 🏃</p>
+        <p class="signup-disclaimer reveal">Sem spam. Só os avisos importantes da Running Beat.</p>
+
+        <div class="footer-links reveal">
+            <a class="f-link" href="index.html">
+                <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="15 18 9 12 15 6"/></svg>
+                Voltar
+            </a>
+            <a class="f-link accent" href="http://lojarunningbeat.com.br/" target="_blank" rel="noopener">Loja</a>
+            <a class="f-link" href="https://www.instagram.com/runningbeatudia/" target="_blank" rel="noopener">Instagram</a>
+            <a class="f-link" href="mailto:parcerias@runningbeat.com.br">Parcerias</a>
+        </div>
+        <p class="copyright reveal">Running Beat · Uberlândia · 2025</p>
+    </div>
+
+    <p class="credit">Desenvolvido por <a href="https://siteswsa.com" target="_blank" rel="noopener">siteswsa.com</a></p>
+
+    <script>
+        // ── Floating particles
+        (function () {
+            const wrap = document.getElementById('hero-particles');
+            for (let i = 0; i < 20; i++) {
+                const el = document.createElement('div');
+                el.className = 'particle';
+                const size   = (Math.random() * 3 + 1).toFixed(1);
+                const x      = (Math.random() * 100).toFixed(1);
+                const dur    = (Math.random() * 9 + 5).toFixed(1);
+                const delay  = (Math.random() * 12).toFixed(1);
+                const op     = (Math.random() * 0.35 + 0.1).toFixed(2);
+                el.style.cssText = `width:${size}px;height:${size}px;left:${x}%;bottom:0;--dur:${dur}s;--delay:${delay}s;--op:${op};`;
+                wrap.appendChild(el);
+            }
+        })();
+
+        // ── Signup form feedback
+        (function () {
+            const form = document.getElementById('signup-form');
+            const msg  = document.getElementById('signup-msg');
+            form.addEventListener('submit', function () {
+                setTimeout(function () {
+                    form.style.display = 'none';
+                    msg.style.display = 'block';
+                }, 600);
+            });
+        })();
+
+        // ── "Ver mais" (Quem somos, mobile)
+        (function () {
+            const btn  = document.getElementById('mov-more-btn');
+            const more = document.getElementById('mov-more');
+            if (!btn || !more) return;
+            btn.addEventListener('click', () => {
+                const isOpen = more.classList.toggle('open');
+                btn.classList.toggle('open', isOpen);
+                btn.firstChild.textContent = isOpen ? 'Ver menos ' : 'Ver mais ';
+            });
+        })();
+
+        // ── Scroll reveal
+        (function () {
+            const els = document.querySelectorAll('.reveal');
+            const io  = new IntersectionObserver(
+                (entries) => entries.forEach(e => { if (e.isIntersecting) { e.target.classList.add('in'); io.unobserve(e.target); } }),
+                { threshold: 0.1 }
+            );
+            els.forEach(el => io.observe(el));
+        })();
+    </script>
+
+</body>
+</html>

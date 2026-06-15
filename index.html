@@ -1,0 +1,306 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Running Beat — Uberlândia</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <style>
+        *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+
+        :root {
+            --p: #43C5FF;
+            --p15: rgba(67,197,255,0.15);
+            --p08: rgba(67,197,255,0.08);
+            --p04: rgba(67,197,255,0.04);
+            --border: rgba(67,197,255,0.18);
+            --muted: rgba(255,255,255,0.5);
+        }
+
+        html, body { height: 100%; }
+
+        html { scroll-behavior: smooth; }
+
+        body {
+            background: #000;
+            color: #fff;
+            font-family: 'Inter', sans-serif;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            overflow-x: hidden;
+            position: relative;
+        }
+
+        /* grain overlay */
+        body::after {
+            content: '';
+            position: fixed;
+            inset: 0;
+            pointer-events: none;
+            z-index: 9998;
+            opacity: 0.04;
+            background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='300' height='300'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.75' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='300' height='300' filter='url(%23n)'/%3E%3C/svg%3E");
+            background-size: 200px 200px;
+        }
+
+        /* ── background atmosphere ── */
+        .bg-glow-center {
+            position: fixed;
+            top: 30%;
+            left: 50%;
+            width: 90vmax;
+            height: 90vmax;
+            background: radial-gradient(circle, rgba(67,197,255,0.10) 0%, rgba(67,197,255,0.03) 35%, transparent 65%);
+            transform: translate(-50%, -50%);
+            animation: breathe 9s ease-in-out infinite;
+            pointer-events: none;
+            z-index: 0;
+        }
+
+        @keyframes breathe { 0%,100% { transform: translate(-50%,-50%) scale(1); opacity:.7; } 50% { transform: translate(-50%,-50%) scale(1.09); opacity:1; } }
+
+        /* mascot */
+        .bassito {
+            position: fixed;
+            right: 1rem;
+            bottom: 0;
+            height: 40vh;
+            z-index: 1;
+            mix-blend-mode: screen;
+            filter: drop-shadow(0 0 50px rgba(67,197,255,0.28))
+                    drop-shadow(0 0 120px rgba(67,197,255,0.1));
+            pointer-events: none;
+        }
+
+        /* extra mascots — pure decorative fill, very transparent */
+        .bassito-deco {
+            position: fixed;
+            z-index: 0;
+            mix-blend-mode: screen;
+            opacity: 0.06;
+            pointer-events: none;
+            user-select: none;
+        }
+
+        .bassito-deco-1 {
+            top: -4%;
+            left: -8%;
+            height: 32vh;
+            transform: scaleX(-1) rotate(8deg);
+        }
+
+        .bassito-deco-2 {
+            top: 38%;
+            right: -10%;
+            height: 26vh;
+            transform: rotate(-6deg);
+            opacity: 0.045;
+        }
+
+        @media (max-width: 520px) {
+            .bassito-deco-1 { height: 22vh; }
+            .bassito-deco-2 { display: none; }
+        }
+
+        .bottom-fade {
+            position: fixed;
+            inset: 0;
+            background: linear-gradient(to bottom, transparent 50%, rgba(0,0,0,0.92) 100%);
+            z-index: 2;
+            pointer-events: none;
+        }
+
+        @keyframes fadeUp {
+            from { opacity: 0; transform: translateY(18px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        /* ── main content ── */
+        main {
+            position: relative;
+            z-index: 10;
+            flex: 1;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 2.5rem 1.5rem;
+        }
+
+        .container {
+            width: 100%;
+            max-width: 440px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            text-align: center;
+        }
+
+        .logo {
+            width: 260px;
+            max-width: 80%;
+            height: auto;
+            filter: drop-shadow(0 0 28px rgba(67,197,255,0.55))
+                    drop-shadow(0 0 70px rgba(67,197,255,0.2));
+            animation: fadeUp 0.6s ease both;
+        }
+
+        .event-teaser {
+            margin-top: 1.6rem;
+            font-size: 0.76rem;
+            color: var(--muted);
+            letter-spacing: 0.14em;
+            text-transform: uppercase;
+            text-align: center;
+            animation: fadeUp 0.6s 0.15s ease both;
+        }
+
+        .event-teaser strong {
+            color: var(--p);
+            font-weight: 700;
+        }
+
+        .links {
+            width: 100%;
+            display: flex;
+            flex-direction: column;
+            gap: 0.75rem;
+            margin-top: 2.25rem;
+        }
+
+        .link-btn {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 0.6rem;
+            width: 100%;
+            padding: 1rem 1.5rem;
+            border: 1.5px solid var(--border);
+            border-radius: 14px;
+            text-decoration: none;
+            color: #fff;
+            font-family: 'Inter', sans-serif;
+            font-weight: 600;
+            font-size: 0.9rem;
+            letter-spacing: 0.025em;
+            background: var(--p04);
+            backdrop-filter: blur(6px);
+            transition: background 0.25s, border-color 0.25s, color 0.25s, transform 0.2s;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .link-btn svg {
+            width: 18px;
+            height: 18px;
+            flex-shrink: 0;
+            transition: inherit;
+        }
+
+        .link-btn:hover {
+            background: var(--p);
+            border-color: var(--p);
+            color: #000;
+            transform: translateY(-2px);
+        }
+
+        .link-btn:active { transform: translateY(0); }
+
+        .link-btn.accent {
+            background: var(--p);
+            border-color: var(--p);
+            color: #000;
+            font-weight: 800;
+            text-transform: uppercase;
+            letter-spacing: 0.08em;
+            font-size: 0.85rem;
+        }
+
+        .link-btn.accent:hover { opacity: 0.88; }
+
+        .link-btn:nth-child(1) { animation: fadeUp 0.5s 0.25s ease both; }
+        .link-btn:nth-child(2) { animation: fadeUp 0.5s 0.35s ease both; }
+        .link-btn:nth-child(3) { animation: fadeUp 0.5s 0.45s ease both; }
+        .link-btn:nth-child(4) { animation: fadeUp 0.5s 0.55s ease both; }
+
+        .city {
+            margin-top: 2.5rem;
+            font-size: 0.7rem;
+            color: rgba(255, 255, 255, 0.2);
+            letter-spacing: 0.2em;
+            text-transform: uppercase;
+            animation: fadeUp 0.5s 0.65s ease both;
+        }
+
+        .credit {
+            position: relative;
+            z-index: 10;
+            text-align: center;
+            padding: 1rem 0 1.25rem;
+            font-size: 0.62rem;
+            color: rgba(255, 255, 255, 0.12);
+            letter-spacing: 0.08em;
+        }
+
+        .credit a {
+            color: inherit;
+            text-decoration: none;
+        }
+
+        .credit a:hover { color: rgba(255, 255, 255, 0.25); }
+
+        @media (max-width: 520px) {
+            .bassito { height: 28vh; right: 0.5rem; }
+        }
+    </style>
+</head>
+<body>
+    <div class="bg-glow-center"></div>
+
+    <img class="bassito" src="BASSITO/BASSITO mascote running beat em 3d - Editado.png" alt="Bassito">
+    <img class="bassito-deco bassito-deco-1" src="BASSITO/BASSITO mascote running beat em 3d - Editado.png" alt="">
+    <img class="bassito-deco bassito-deco-2" src="BASSITO/BASSITO mascote running beat em 3d - Editado.png" alt="">
+    <div class="bottom-fade"></div>
+
+    <main>
+        <div class="container">
+            <img class="logo" src="TRANSPARENTE/Logo horizontal2.png" alt="Running Beat">
+
+            <p class="event-teaser">Próximo evento <strong>08.08</strong> · Save the date</p>
+
+            <div class="links">
+                <a class="link-btn accent" href="http://lojarunningbeat.com.br/" target="_blank" rel="noopener">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <path d="M6 2L3 6v14a2 2 0 002 2h14a2 2 0 002-2V6l-3-4z"/><line x1="3" y1="6" x2="21" y2="6"/><path d="M16 10a4 4 0 01-8 0"/>
+                    </svg>
+                    Acessar a Loja
+                </a>
+                <a class="link-btn" href="sobre.html">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <circle cx="12" cy="12" r="10"/><path d="M12 8v4m0 4h.01"/>
+                    </svg>
+                    Sobre o Movimento
+                </a>
+                <a class="link-btn" href="https://www.instagram.com/runningbeatudia/" target="_blank" rel="noopener">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <rect x="2" y="2" width="20" height="20" rx="5" ry="5"/><path d="M16 11.37A4 4 0 1112.63 8 4 4 0 0116 11.37z"/><line x1="17.5" y1="6.5" x2="17.51" y2="6.5"/>
+                    </svg>
+                    @runningbeatudia
+                </a>
+                <a class="link-btn" href="mailto:parcerias@runningbeat.com.br">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <path d="M17 21v-2a4 4 0 00-4-4H5a4 4 0 00-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 00-3-3.87"/><path d="M16 3.13a4 4 0 010 7.75"/>
+                    </svg>
+                    Parcerias
+                </a>
+            </div>
+
+            <p class="city">Uberlândia · Minas Gerais</p>
+        </div>
+    </main>
+
+    <p class="credit">Desenvolvido por <a href="https://siteswsa.com" target="_blank" rel="noopener">siteswsa.com</a></p>
+</body>
+</html>

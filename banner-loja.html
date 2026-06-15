@@ -1,0 +1,401 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Running Beat — Banner Loja</title>
+<style>
+    *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+
+    :root {
+        --blue: #1a56ff;
+        --bg: #0a0a0a;
+    }
+
+    html, body {
+        width: 100%;
+        background: #050505;
+    }
+
+    body {
+        min-height: 100vh;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        padding: 20px;
+    }
+
+    /* ═══════════════════════════════
+       BANNER
+    ═══════════════════════════════ */
+    .banner-wrap {
+        position: relative;
+        width: 100%;
+        max-width: 1440px;
+        /* aspect ratio 1440/600 via padding-top hack (works in all browsers) */
+        padding-top: 41.6667%;
+    }
+
+    .banner {
+        position: absolute;
+        inset: 0;
+        background: var(--bg);
+        overflow: hidden;
+        color: #fff;
+        font-family: 'Arial Black', 'Helvetica Neue', Arial, sans-serif;
+        box-shadow: 0 0 80px rgba(26,86,255,0.08);
+    }
+
+    /* ── grid track background ── */
+    .grid-bg {
+        position: absolute;
+        inset: -60% -10% -10% -10%;
+        background-image:
+            linear-gradient(rgba(26,86,255,0.16) 1px, transparent 1px),
+            linear-gradient(90deg, rgba(26,86,255,0.16) 1px, transparent 1px);
+        background-size: 56px 56px;
+        transform: perspective(420px) rotateX(58deg);
+        transform-origin: center bottom;
+        opacity: 0.55;
+        z-index: 0;
+        animation: gridMove 6s linear infinite;
+    }
+
+    @keyframes gridMove {
+        from { background-position: 0 0, 0 0; }
+        to   { background-position: 0 56px, 56px 0; }
+    }
+
+    .vignette {
+        position: absolute;
+        inset: 0;
+        background:
+            radial-gradient(ellipse 80% 70% at 50% 100%, rgba(26,86,255,0.18) 0%, transparent 60%),
+            radial-gradient(ellipse 100% 100% at 50% 50%, transparent 40%, rgba(0,0,0,0.75) 100%);
+        z-index: 1;
+        pointer-events: none;
+    }
+
+    /* ── equalizer / sound wave ── */
+    .eq {
+        position: absolute;
+        left: 0; right: 0; bottom: 0;
+        height: 58%;
+        display: flex;
+        align-items: flex-end;
+        justify-content: space-between;
+        gap: clamp(2px, 0.4vw, 6px);
+        padding: 0 3%;
+        z-index: 2;
+        opacity: 0.3;
+        pointer-events: none;
+        -webkit-mask-image: linear-gradient(to top, rgba(0,0,0,0.9), transparent);
+        mask-image: linear-gradient(to top, rgba(0,0,0,0.9), transparent);
+    }
+
+    .eq span {
+        flex: 1;
+        background: linear-gradient(to top, var(--blue), rgba(26,86,255,0));
+        border-radius: 2px 2px 0 0;
+        animation: eqPulse ease-in-out infinite;
+    }
+
+    @keyframes eqPulse {
+        0%, 100% { transform: scaleY(0.25); }
+        50%      { transform: scaleY(1); }
+    }
+
+    /* ── scanlines overlay ── */
+    .scanlines {
+        position: absolute;
+        inset: 0;
+        z-index: 60;
+        pointer-events: none;
+        background: repeating-linear-gradient(
+            to bottom,
+            rgba(255,255,255,0.045) 0px,
+            rgba(255,255,255,0.045) 1px,
+            transparent 1px,
+            transparent 3px
+        );
+        mix-blend-mode: overlay;
+        opacity: 0.5;
+    }
+
+    /* ── falling particles ── */
+    #particles {
+        position: absolute;
+        inset: 0;
+        z-index: 3;
+        pointer-events: none;
+        overflow: hidden;
+    }
+
+    .particle {
+        position: absolute;
+        top: -5%;
+        background: #fff;
+        border-radius: 50%;
+        opacity: 0;
+        animation: fall linear infinite;
+    }
+
+    @keyframes fall {
+        0%   { transform: translateY(0); opacity: 0; }
+        10%  { opacity: var(--op, 0.5); }
+        90%  { opacity: var(--op, 0.5); }
+        100% { transform: translateY(120vh); opacity: 0; }
+    }
+
+    /* ── badge top-left ── */
+    .badge {
+        position: absolute;
+        top: clamp(16px, 3vw, 32px);
+        left: clamp(16px, 3vw, 32px);
+        z-index: 10;
+        border: 1px solid var(--blue);
+        color: var(--blue);
+        font-family: 'Courier New', Courier, monospace;
+        font-size: clamp(0.65rem, 1vw, 0.9rem);
+        letter-spacing: 0.22em;
+        text-transform: uppercase;
+        padding: 0.5em 1em;
+        background: rgba(26,86,255,0.06);
+        backdrop-filter: blur(4px);
+        opacity: 0;
+        animation: fadeInLeft 0.7s 0.2s ease forwards;
+    }
+
+    /* ── product images ── */
+    .product {
+        position: absolute;
+        z-index: 4;
+        filter: drop-shadow(0 25px 35px rgba(0,0,0,0.6));
+        opacity: 0;
+        animation: fadeInProduct 0.9s ease forwards, floatY 6s ease-in-out infinite;
+    }
+
+    .p-cap {
+        top: 8%;
+        right: 6%;
+        width: clamp(110px, 13vw, 190px);
+        animation-delay: 0.5s, 1.2s;
+        transform: rotate(8deg);
+    }
+
+    .p-regata {
+        bottom: 10%;
+        right: 13%;
+        width: clamp(140px, 17vw, 250px);
+        animation-delay: 0.65s, 0.6s;
+        transform: rotate(-4deg);
+    }
+
+    .p-camiseta {
+        bottom: -6%;
+        right: 36%;
+        width: clamp(150px, 19vw, 280px);
+        animation-delay: 0.8s, 0s;
+        transform: rotate(5deg);
+    }
+
+    @keyframes fadeInProduct {
+        from { opacity: 0; transform: translateY(40px) rotate(var(--r, 0deg)); }
+        to   { opacity: 1; }
+    }
+
+    @keyframes floatY {
+        0%, 100% { transform: translateY(0) rotate(var(--rot, 0deg)); }
+        50%      { transform: translateY(-16px) rotate(var(--rot, 0deg)); }
+    }
+
+    .p-cap      { --rot: 8deg; }
+    .p-regata   { --rot: -4deg; }
+    .p-camiseta { --rot: 5deg; }
+
+    /* ── main copy ── */
+    .copy {
+        position: absolute;
+        left: clamp(24px, 4vw, 64px);
+        top: 50%;
+        transform: translateY(-50%);
+        z-index: 10;
+        max-width: 70%;
+    }
+
+    .title {
+        font-size: clamp(3.2rem, 9.5vw, 8.5rem);
+        font-weight: 900;
+        line-height: 0.92;
+        letter-spacing: -0.01em;
+        text-transform: uppercase;
+        overflow: hidden;
+    }
+
+    .title span {
+        display: block;
+        transform: translateY(110%);
+        opacity: 0;
+        animation: lineUp 0.8s cubic-bezier(.16,1,.3,1) forwards;
+    }
+
+    .title .l1 { color: #fff; animation-delay: 0.15s; }
+    .title .l2 { color: var(--blue); animation-delay: 0.32s; text-shadow: 0 0 40px rgba(26,86,255,0.6); }
+
+    @keyframes lineUp {
+        to { transform: translateY(0); opacity: 1; }
+    }
+
+    .subtitle {
+        margin-top: clamp(0.8rem, 2vw, 1.5rem);
+        font-family: 'Helvetica Neue', Arial, sans-serif;
+        font-weight: 700;
+        font-size: clamp(0.85rem, 1.6vw, 1.35rem);
+        letter-spacing: 0.04em;
+        color: #fff;
+        text-transform: none;
+        opacity: 0;
+        animation: fadeInLeft 0.7s 0.55s ease forwards;
+    }
+
+    @keyframes fadeInLeft {
+        from { opacity: 0; transform: translateX(-24px); }
+        to   { opacity: 1; transform: translateX(0); }
+    }
+
+    /* ── CTA bottom-right ── */
+    .cta {
+        position: absolute;
+        bottom: clamp(16px, 3vw, 32px);
+        right: clamp(16px, 3vw, 32px);
+        z-index: 20;
+        background: var(--blue);
+        color: var(--bg);
+        font-family: 'Helvetica Neue', Arial, sans-serif;
+        font-weight: 900;
+        font-size: clamp(0.8rem, 1.3vw, 1.15rem);
+        letter-spacing: 0.12em;
+        text-transform: uppercase;
+        text-decoration: none;
+        padding: clamp(0.7em, 1.4vw, 1.1em) clamp(1.3em, 2.4vw, 2.2em);
+        border-radius: 0;
+        opacity: 0;
+        animation: fadeInUp 0.7s 0.75s ease forwards;
+        transition: background 0.2s, color 0.2s, transform 0.2s;
+    }
+
+    .cta:hover {
+        background: #fff;
+        transform: translateY(-3px);
+    }
+
+    @keyframes fadeInUp {
+        from { opacity: 0; transform: translateY(24px); }
+        to   { opacity: 1; transform: translateY(0); }
+    }
+
+    /* ── responsive (mobile banner 390x500) ── */
+    @media (max-width: 600px) {
+        .banner-wrap { padding-top: 128.2051%; } /* 500/390 */
+
+        .copy {
+            left: 20px;
+            right: 20px;
+            max-width: 100%;
+        }
+
+        .title { font-size: clamp(2.6rem, 15vw, 4.2rem); }
+
+        .p-cap { display: none; }
+
+        .p-regata {
+            width: 38vw;
+            bottom: 18%;
+            right: 4%;
+            opacity: 0.9;
+        }
+
+        .p-camiseta {
+            width: 46vw;
+            bottom: -4%;
+            right: -6%;
+        }
+
+        .cta {
+            font-size: 0.78rem;
+            padding: 0.85em 1.4em;
+        }
+
+        .badge { font-size: 0.6rem; letter-spacing: 0.16em; }
+    }
+</style>
+</head>
+<body>
+
+    <div class="banner-wrap">
+    <div class="banner" id="banner">
+        <div class="grid-bg"></div>
+        <div class="vignette"></div>
+
+        <div class="eq" id="eq"></div>
+
+        <div id="particles"></div>
+
+        <div class="badge">08.08 · Uberlândia</div>
+
+        <img class="product p-cap" src="produtos running beat/boné de lado running beat.png" alt="Boné Running Beat">
+        <img class="product p-regata" src="produtos running beat/frente regata running beat.png" alt="Regata Running Beat">
+        <img class="product p-camiseta" src="produtos running beat/frente camiseta de manga running beat.png" alt="Camiseta Running Beat">
+
+        <div class="copy">
+            <h1 class="title">
+                <span class="l1">Primeira</span>
+                <span class="l2">Coleção</span>
+            </h1>
+            <p class="subtitle">F*da-se o Pace. Vista o movimento.</p>
+        </div>
+
+        <a class="cta" href="#">Ver Coleção →</a>
+
+        <div class="scanlines"></div>
+    </div>
+    </div>
+
+    <script>
+        // ── equalizer bars
+        (function () {
+            const eq = document.getElementById('eq');
+            const count = 48;
+            for (let i = 0; i < count; i++) {
+                const bar = document.createElement('span');
+                const dur = (Math.random() * 0.9 + 0.6).toFixed(2);
+                const delay = (Math.random() * -2).toFixed(2);
+                const minH = (Math.random() * 30 + 10).toFixed(0);
+                bar.style.animationDuration = dur + 's';
+                bar.style.animationDelay = delay + 's';
+                bar.style.transformOrigin = 'bottom';
+                bar.style.height = minH + '%';
+                eq.appendChild(bar);
+            }
+        })();
+
+        // ── falling particles
+        (function () {
+            const wrap = document.getElementById('particles');
+            const count = 40;
+            for (let i = 0; i < count; i++) {
+                const p = document.createElement('div');
+                p.className = 'particle';
+                const size = (Math.random() * 2.5 + 1).toFixed(1);
+                const x = (Math.random() * 100).toFixed(1);
+                const dur = (Math.random() * 10 + 8).toFixed(1);
+                const delay = (Math.random() * -18).toFixed(1);
+                const op = (Math.random() * 0.4 + 0.15).toFixed(2);
+                p.style.cssText = `width:${size}px;height:${size}px;left:${x}%;--op:${op};animation-duration:${dur}s;animation-delay:${delay}s;`;
+                wrap.appendChild(p);
+            }
+        })();
+    </script>
+
+</body>
+</html>
