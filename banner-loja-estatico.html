@@ -3,277 +3,234 @@
 <head>
 <meta charset="UTF-8">
 <title>Running Beat — Banner Loja</title>
-<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
 <style>
     * { margin:0; padding:0; box-sizing:border-box; }
-    html, body { background:#050505; }
+    html, body { background:#111; }
     body { display:flex; align-items:center; justify-content:center; min-height:100vh; }
 
     .banner {
         position: relative;
         width: 1440px;
         height: 600px;
-        background: #080808;
+        background: #0a0a0a;
         overflow: hidden;
         color: #fff;
+        font-family: 'Inter', sans-serif;
     }
 
-    /* pista perspectivada ao fundo */
-    .track {
+    /* ── ZONA DA FOTO (direita, cortada em diagonal) ── */
+    .photo-zone {
         position: absolute;
-        inset: -30% -5% -5% -5%;
-        background-image:
-            linear-gradient(rgba(26,86,255,0.13) 1px, transparent 1px),
-            linear-gradient(90deg, rgba(26,86,255,0.08) 1px, transparent 1px);
-        background-size: 72px 72px;
-        transform: perspective(460px) rotateX(58deg);
-        transform-origin: center bottom;
-        opacity: 0.5;
-        z-index: 0;
-    }
-
-    /* gradiente atmosférico azul esquerda */
-    .atmos {
-        position: absolute;
-        inset: 0;
-        z-index: 1;
-        background:
-            radial-gradient(ellipse 55% 90% at 5% 55%, rgba(26,86,255,0.22) 0%, transparent 65%),
-            radial-gradient(ellipse 35% 60% at 70% 50%, rgba(67,197,255,0.06) 0%, transparent 60%);
-    }
-
-    /* vinheta geral */
-    .vignette {
-        position: absolute;
-        inset: 0;
+        right: 0; top: 0; bottom: 0;
+        width: 62%;
+        background: #d8d8d8;
+        clip-path: polygon(9% 0%, 100% 0%, 100% 100%, 0% 100%);
         z-index: 2;
-        background:
-            linear-gradient(to top, #080808 0%, transparent 28%),
-            linear-gradient(to bottom, #080808 0%, transparent 18%),
-            radial-gradient(ellipse 100% 100% at 50% 50%, transparent 50%, rgba(0,0,0,0.65) 100%);
+        overflow: hidden;
     }
 
-    /* grain overlay */
-    .grain {
+    .photo-zone img {
         position: absolute;
-        inset: 0;
-        z-index: 50;
-        opacity: 0.045;
-        pointer-events: none;
-        background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='300' height='300'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.75' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='300' height='300' filter='url(%23n)'/%3E%3C/svg%3E");
-        background-size: 200px 200px;
-    }
-
-    /* ── MODELO ── */
-    .model-wrap {
-        position: absolute;
-        right: 0;
         bottom: 0;
-        width: 680px;
-        height: 100%;
-        z-index: 6;
-    }
-
-    .model-wrap img {
-        position: absolute;
-        bottom: -2%;
-        right: 4%;
-        height: 112%;
+        left: 50%;
+        transform: translateX(-46%);
+        height: 108%;
         object-fit: contain;
         object-position: bottom center;
-        filter: contrast(1.12) brightness(0.88) saturate(0.85);
-        mask-image:
-            linear-gradient(to right, transparent 0%, black 22%),
-            linear-gradient(to top, black 72%, transparent 100%),
-            linear-gradient(to bottom, black 85%, transparent 100%);
-        mask-composite: intersect;
-        -webkit-mask-image:
-            linear-gradient(to right, transparent 0%, black 22%),
-            linear-gradient(to top, black 72%, transparent 100%),
-            linear-gradient(to bottom, black 85%, transparent 100%);
-        -webkit-mask-composite: source-in;
+        filter: contrast(1.08) saturate(0.92);
     }
 
-    /* overlay escuro sobre o modelo para fundir com o fundo */
-    .model-overlay {
+    /* escurece levemente a borda direita da foto */
+    .photo-zone::after {
+        content: '';
         position: absolute;
         inset: 0;
         background:
-            linear-gradient(to right, #080808 0%, transparent 28%),
-            linear-gradient(to top, #080808 0%, transparent 25%),
-            radial-gradient(ellipse 80% 100% at 60% 50%, transparent 40%, rgba(8,8,8,0.55) 100%);
+            linear-gradient(to right, transparent 70%, rgba(0,0,0,0.18) 100%),
+            linear-gradient(to top, rgba(0,0,0,0.12) 0%, transparent 20%);
     }
 
-    /* ── COPY ESQUERDA ── */
-    .copy {
+    /* ── ZONA DARK (esquerda) ── */
+    .dark-zone {
         position: absolute;
-        left: 68px;
-        top: 50%;
-        transform: translateY(-52%);
-        z-index: 15;
-        max-width: 660px;
+        left: 0; top: 0; bottom: 0;
+        width: 56%;
+        z-index: 3;
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        padding: 0 64px;
+    }
+
+    /* glow azul sutil na zona dark */
+    .dark-zone::before {
+        content: '';
+        position: absolute;
+        inset: 0;
+        background: radial-gradient(ellipse 70% 80% at 10% 60%, rgba(26,86,255,0.14) 0%, transparent 65%);
+        pointer-events: none;
+    }
+
+    /* sobreposição que cobre a borda esquerda da foto-zone */
+    .dark-zone::after {
+        content: '';
+        position: absolute;
+        right: -1px; top: 0; bottom: 0;
+        width: 60px;
+        background: linear-gradient(to right, #0a0a0a, transparent);
+        pointer-events: none;
     }
 
     .eyebrow {
         display: inline-flex;
         align-items: center;
-        gap: 12px;
-        font-family: 'Inter', sans-serif;
-        font-size: 11px;
+        gap: 10px;
+        font-size: 10.5px;
         font-weight: 700;
-        letter-spacing: 0.36em;
+        letter-spacing: 0.38em;
         text-transform: uppercase;
-        color: rgba(255,255,255,0.45);
-        margin-bottom: 20px;
+        color: rgba(255,255,255,0.4);
+        margin-bottom: 14px;
     }
     .eyebrow::before {
         content: '';
-        width: 24px;
-        height: 1px;
+        width: 22px; height: 1px;
         background: #1a56ff;
         flex-shrink: 0;
     }
 
-    .tag-colecao {
-        display: block;
-        font-family: 'Inter', sans-serif;
-        font-size: 13px;
-        font-weight: 700;
-        letter-spacing: 0.28em;
-        text-transform: uppercase;
-        color: #43C5FF;
-        margin-bottom: 10px;
-    }
-
     .title {
-        font-family: 'Bebas Neue', 'Arial Black', Impact, sans-serif;
-        line-height: 0.86;
-        text-transform: uppercase;
+        font-family: 'Bebas Neue', Impact, sans-serif;
+        line-height: 0.85;
         letter-spacing: 0.01em;
     }
 
     .t1 {
         display: block;
-        font-size: 138px;
+        font-size: 152px;
         color: #ffffff;
         text-shadow:
             2px 2px 0 #1a56ff,
-            4px 4px 0 #1341cc,
-            6px 6px 0 #0c2c99,
-            8px 8px 0 #071b66,
-            9px 9px 18px rgba(0,0,0,0.8),
-            0 0 60px rgba(26,86,255,0.25);
+            4px 4px 0 #1340c8,
+            6px 6px 0 #0c2c96,
+            8px 8px 0 #071a60,
+            10px 10px 20px rgba(0,0,0,0.9);
     }
 
     .t2 {
         display: block;
-        font-size: 138px;
+        font-size: 152px;
         color: #43C5FF;
         text-shadow:
             2px 2px 0 #1a56ff,
-            4px 4px 0 #1341cc,
-            6px 6px 0 #0c2c99,
-            8px 8px 0 #071b66,
-            9px 9px 18px rgba(0,0,0,0.8),
-            0 0 80px rgba(67,197,255,0.3);
+            4px 4px 0 #1340c8,
+            6px 6px 0 #0c2c96,
+            8px 8px 0 #071a60,
+            10px 10px 20px rgba(0,0,0,0.9),
+            0 0 80px rgba(67,197,255,0.2);
     }
 
     .tagline {
-        margin-top: 22px;
-        font-family: 'Inter', sans-serif;
-        font-size: 15px;
+        margin-top: 18px;
+        font-size: 14px;
         font-weight: 500;
-        letter-spacing: 0.1em;
+        letter-spacing: 0.12em;
         text-transform: uppercase;
-        color: rgba(255,255,255,0.42);
+        color: rgba(255,255,255,0.38);
     }
 
-    /* CTA */
-    .cta {
-        display: inline-flex;
-        align-items: center;
-        gap: 14px;
-        margin-top: 30px;
-        font-family: 'Inter', sans-serif;
-        font-size: 13px;
-        font-weight: 700;
-        letter-spacing: 0.18em;
-        text-transform: uppercase;
+    .cta-btn {
+        display: inline-block;
+        margin-top: 28px;
+        background: #1a56ff;
         color: #fff;
+        font-family: 'Inter', sans-serif;
+        font-size: 12px;
+        font-weight: 800;
+        letter-spacing: 0.2em;
+        text-transform: uppercase;
+        padding: 14px 34px;
         text-decoration: none;
-        padding-bottom: 8px;
-        border-bottom: 1px solid #1a56ff;
+        border-radius: 0;
+        transition: background 0.2s;
+        width: fit-content;
     }
-    .cta span { color: #43C5FF; }
+    .cta-btn:hover { background: #43C5FF; color: #000; }
 
-    /* badge data */
+    /* ── BADGE sobreposto à diagonal ── */
     .badge {
         position: absolute;
-        top: 28px;
-        right: 32px;
-        z-index: 15;
-        border: 1px solid rgba(67,197,255,0.3);
-        color: rgba(67,197,255,0.75);
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+        z-index: 10;
+        background: #0a0a0a;
+        border: 1.5px solid rgba(67,197,255,0.45);
+        color: #43C5FF;
         font-family: 'Courier New', monospace;
-        font-size: 11px;
-        letter-spacing: 0.24em;
+        font-size: 10px;
+        letter-spacing: 0.26em;
         text-transform: uppercase;
-        padding: 0.45em 1.1em;
-        background: rgba(26,86,255,0.07);
+        padding: 0.55em 1.2em;
+        white-space: nowrap;
     }
 
-    /* logo top left */
+    /* ── LOGO top left ── */
     .logo {
         position: absolute;
         top: 26px;
-        left: 68px;
-        z-index: 15;
-        height: 28px;
-        opacity: 0.9;
-        filter: drop-shadow(0 0 12px rgba(67,197,255,0.4));
+        left: 64px;
+        z-index: 10;
+        height: 26px;
+        opacity: 0.85;
+        filter: drop-shadow(0 0 10px rgba(67,197,255,0.35));
     }
 
-    /* linha divisória diagonal sutil */
-    .divider {
+    /* ── DATA/URL bottom left ── */
+    .bottom-info {
         position: absolute;
-        top: 0;
-        bottom: 0;
-        left: 54%;
-        width: 1px;
-        background: linear-gradient(to bottom, transparent, rgba(26,86,255,0.2) 30%, rgba(26,86,255,0.2) 70%, transparent);
-        transform: rotate(4deg) scaleY(1.1);
-        z-index: 4;
+        bottom: 28px;
+        left: 64px;
+        z-index: 10;
+        font-size: 10px;
+        font-weight: 600;
+        letter-spacing: 0.22em;
+        text-transform: uppercase;
+        color: rgba(255,255,255,0.2);
+    }
+
+    /* grain */
+    .grain {
+        position: absolute;
+        inset: 0; z-index: 50;
+        opacity: 0.04; pointer-events: none;
+        background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='300' height='300'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.75' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='300' height='300' filter='url(%23n)'/%3E%3C/svg%3E");
+        background-size: 200px 200px;
     }
 </style>
 </head>
 <body>
-<div class="banner" id="banner">
+<div class="banner">
 
-    <div class="track"></div>
-    <div class="atmos"></div>
-    <div class="vignette"></div>
-
-    <div class="model-wrap">
+    <div class="photo-zone">
         <img src="PNG/modelo1.png" alt="Modelo Running Beat">
-        <div class="model-overlay"></div>
     </div>
 
-    <div class="divider"></div>
-
-    <img class="logo" src="TRANSPARENTE/Logo horizontal2.png" alt="Running Beat">
-
-    <div class="copy">
+    <div class="dark-zone">
         <span class="eyebrow">Running Beat · Loja Oficial</span>
-        <span class="tag-colecao">Nova coleção</span>
         <div class="title">
             <span class="t1">Primeira</span>
             <span class="t2">Coleção</span>
         </div>
         <p class="tagline">F*da-se o Pace. Vista o movimento.</p>
-        <a class="cta" href="#">Ver coleção <span>→</span></a>
+        <a class="cta-btn" href="#">Ver coleção</a>
     </div>
 
-    <div class="badge">08.08 · Uberlândia</div>
+    <div class="badge">08.08 · Uberlândia, MG</div>
+
+    <img class="logo" src="TRANSPARENTE/Logo horizontal2.png" alt="Running Beat">
+    <p class="bottom-info">runningbeat.com.br</p>
 
     <div class="grain"></div>
 </div>
