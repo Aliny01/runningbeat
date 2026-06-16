@@ -19,13 +19,12 @@
         font-family: 'Inter', sans-serif;
     }
 
-    /* ── ZONA DA FOTO (direita, cortada em diagonal) ── */
+    /* ── FOTO DO MODELO (ocupa a direita, sem clip-path) ── */
     .photo-zone {
         position: absolute;
         right: 0; top: 0; bottom: 0;
-        width: 62%;
-        background: #d8d8d8;
-        clip-path: polygon(9% 0%, 100% 0%, 100% 100%, 0% 100%);
+        width: 68%;
+        background: #2a2a2a;
         z-index: 2;
         overflow: hidden;
     }
@@ -33,53 +32,46 @@
     .photo-zone img {
         position: absolute;
         bottom: 0;
-        left: 50%;
-        transform: translateX(-46%);
-        height: 108%;
+        right: 8%;
+        height: 110%;
         object-fit: contain;
         object-position: bottom center;
-        filter: contrast(1.08) saturate(0.92);
+        /* escurece o modelo para integrar ao fundo dark */
+        filter: brightness(0.68) contrast(1.12) saturate(0.75);
     }
 
-    /* escurece levemente a borda direita da foto */
-    .photo-zone::after {
-        content: '';
+    /* gradiente que cobre o fundo da foto e funde com o dark */
+    .photo-overlay {
         position: absolute;
         inset: 0;
+        z-index: 4;
         background:
-            linear-gradient(to right, transparent 70%, rgba(0,0,0,0.18) 100%),
-            linear-gradient(to top, rgba(0,0,0,0.12) 0%, transparent 20%);
+            /* funde esquerda com o fundo dark */
+            linear-gradient(to right, #0a0a0a 0%, rgba(10,10,10,0.88) 14%, rgba(10,10,10,0.45) 32%, rgba(10,10,10,0.1) 52%, transparent 70%),
+            /* vinheta topo */
+            linear-gradient(to bottom, rgba(10,10,10,0.6) 0%, transparent 22%),
+            /* vinheta base */
+            linear-gradient(to top, #0a0a0a 0%, rgba(10,10,10,0.4) 18%, transparent 35%),
+            /* vinheta direita */
+            linear-gradient(to left, rgba(10,10,10,0.45) 0%, transparent 30%);
     }
 
-    /* ── ZONA DARK (esquerda) ── */
-    .dark-zone {
-        position: absolute;
-        left: 0; top: 0; bottom: 0;
-        width: 56%;
-        z-index: 3;
-        display: flex;
-        flex-direction: column;
-        justify-content: center;
-        padding: 0 64px;
-    }
-
-    /* glow azul sutil na zona dark */
-    .dark-zone::before {
-        content: '';
+    /* glow azul atmosférico atrás do modelo */
+    .photo-glow {
         position: absolute;
         inset: 0;
-        background: radial-gradient(ellipse 70% 80% at 10% 60%, rgba(26,86,255,0.14) 0%, transparent 65%);
-        pointer-events: none;
+        z-index: 3;
+        background: radial-gradient(ellipse 55% 70% at 72% 50%, rgba(26,86,255,0.14) 0%, transparent 65%);
     }
 
-    /* sobreposição que cobre a borda esquerda da foto-zone */
-    .dark-zone::after {
-        content: '';
+    /* ── TEXTO ESQUERDA ── */
+    .copy {
         position: absolute;
-        right: -1px; top: 0; bottom: 0;
-        width: 60px;
-        background: linear-gradient(to right, #0a0a0a, transparent);
-        pointer-events: none;
+        left: 68px;
+        top: 50%;
+        transform: translateY(-52%);
+        z-index: 10;
+        max-width: 650px;
     }
 
     .eyebrow {
@@ -90,7 +82,7 @@
         font-weight: 700;
         letter-spacing: 0.38em;
         text-transform: uppercase;
-        color: rgba(255,255,255,0.4);
+        color: rgba(255,255,255,0.38);
         margin-bottom: 14px;
     }
     .eyebrow::before {
@@ -108,103 +100,98 @@
 
     .t1 {
         display: block;
-        font-size: 152px;
+        font-size: 158px;
         color: #ffffff;
         text-shadow:
             2px 2px 0 #1a56ff,
             4px 4px 0 #1340c8,
             6px 6px 0 #0c2c96,
             8px 8px 0 #071a60,
-            10px 10px 20px rgba(0,0,0,0.9);
+            10px 10px 22px rgba(0,0,0,0.95);
     }
 
     .t2 {
         display: block;
-        font-size: 152px;
+        font-size: 158px;
         color: #43C5FF;
         text-shadow:
             2px 2px 0 #1a56ff,
             4px 4px 0 #1340c8,
             6px 6px 0 #0c2c96,
             8px 8px 0 #071a60,
-            10px 10px 20px rgba(0,0,0,0.9),
-            0 0 80px rgba(67,197,255,0.2);
+            10px 10px 22px rgba(0,0,0,0.95),
+            0 0 80px rgba(67,197,255,0.18);
     }
 
     .tagline {
-        margin-top: 18px;
-        font-size: 14px;
-        font-weight: 500;
-        letter-spacing: 0.12em;
+        margin-top: 16px;
+        font-size: 13px;
+        font-weight: 600;
+        letter-spacing: 0.14em;
         text-transform: uppercase;
-        color: rgba(255,255,255,0.38);
+        color: rgba(255,255,255,0.35);
     }
 
     .cta-btn {
         display: inline-block;
-        margin-top: 28px;
+        margin-top: 26px;
         background: #1a56ff;
         color: #fff;
-        font-family: 'Inter', sans-serif;
         font-size: 12px;
         font-weight: 800;
-        letter-spacing: 0.2em;
+        letter-spacing: 0.22em;
         text-transform: uppercase;
-        padding: 14px 34px;
+        padding: 14px 36px;
         text-decoration: none;
-        border-radius: 0;
-        transition: background 0.2s;
-        width: fit-content;
+        transition: background 0.2s, color 0.2s;
     }
     .cta-btn:hover { background: #43C5FF; color: #000; }
 
-    /* ── BADGE sobreposto à diagonal ── */
+    /* ── BADGE ── */
     .badge {
         position: absolute;
-        top: 50%;
-        left: 50%;
-        transform: translate(-50%, -50%);
-        z-index: 10;
-        background: #0a0a0a;
-        border: 1.5px solid rgba(67,197,255,0.45);
-        color: #43C5FF;
+        top: 28px;
+        right: 36px;
+        z-index: 12;
+        border: 1px solid rgba(67,197,255,0.35);
+        color: rgba(67,197,255,0.7);
         font-family: 'Courier New', monospace;
         font-size: 10px;
         letter-spacing: 0.26em;
         text-transform: uppercase;
-        padding: 0.55em 1.2em;
-        white-space: nowrap;
+        padding: 0.5em 1.1em;
+        background: rgba(10,10,10,0.7);
     }
 
-    /* ── LOGO top left ── */
+    /* ── LOGO ── */
     .logo {
         position: absolute;
-        top: 26px;
-        left: 64px;
-        z-index: 10;
+        top: 24px;
+        left: 68px;
+        z-index: 12;
         height: 26px;
-        opacity: 0.85;
-        filter: drop-shadow(0 0 10px rgba(67,197,255,0.35));
+        opacity: 0.82;
+        filter: drop-shadow(0 0 10px rgba(67,197,255,0.3));
     }
 
-    /* ── DATA/URL bottom left ── */
+    /* ── URL rodapé ── */
     .bottom-info {
         position: absolute;
-        bottom: 28px;
-        left: 64px;
-        z-index: 10;
+        bottom: 24px;
+        left: 68px;
+        z-index: 12;
         font-size: 10px;
         font-weight: 600;
         letter-spacing: 0.22em;
         text-transform: uppercase;
-        color: rgba(255,255,255,0.2);
+        color: rgba(255,255,255,0.18);
     }
 
     /* grain */
     .grain {
         position: absolute;
         inset: 0; z-index: 50;
-        opacity: 0.04; pointer-events: none;
+        opacity: 0.045; pointer-events: none;
         background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='300' height='300'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.75' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='300' height='300' filter='url(%23n)'/%3E%3C/svg%3E");
         background-size: 200px 200px;
     }
@@ -215,9 +202,11 @@
 
     <div class="photo-zone">
         <img src="PNG/modelo1.png" alt="Modelo Running Beat">
+        <div class="photo-glow"></div>
+        <div class="photo-overlay"></div>
     </div>
 
-    <div class="dark-zone">
+    <div class="copy">
         <span class="eyebrow">Running Beat · Loja Oficial</span>
         <div class="title">
             <span class="t1">Primeira</span>
@@ -228,7 +217,6 @@
     </div>
 
     <div class="badge">08.08 · Uberlândia, MG</div>
-
     <img class="logo" src="TRANSPARENTE/Logo horizontal2.png" alt="Running Beat">
     <p class="bottom-info">runningbeat.com.br</p>
 
