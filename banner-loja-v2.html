@@ -1,0 +1,278 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<title>Running Beat — Banner Loja v2</title>
+<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Playfair+Display:ital@1&family=Inter:wght@400;600;700;800&display=swap" rel="stylesheet">
+<style>
+    * { margin:0; padding:0; box-sizing:border-box; }
+    html, body { background:#111; }
+    body { display:flex; align-items:center; justify-content:center; min-height:100vh; }
+
+    .banner {
+        position: relative;
+        width: 1440px;
+        height: 600px;
+        background: #080808;
+        overflow: hidden;
+        color: #fff;
+        font-family: 'Inter', sans-serif;
+    }
+
+    /* ── FOTO (direita, fundo dark original) ── */
+    .photo-zone {
+        position: absolute;
+        right: 0; top: 0; bottom: 0;
+        width: 52%;
+        overflow: hidden;
+        z-index: 2;
+    }
+
+    .photo-zone img {
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        transform: translate(-48%, -50%);
+        height: 100%;
+        width: auto;
+        object-fit: cover;
+        filter: brightness(0.92) contrast(1.05);
+    }
+
+    /* funde a borda esquerda da foto com o fundo dark */
+    .photo-fade {
+        position: absolute;
+        inset: 0;
+        z-index: 3;
+        background:
+            linear-gradient(to right, #080808 0%, rgba(8,8,8,0.72) 12%, rgba(8,8,8,0.18) 30%, transparent 52%),
+            linear-gradient(to top, rgba(8,8,8,0.5) 0%, transparent 20%),
+            linear-gradient(to bottom, rgba(8,8,8,0.4) 0%, transparent 18%);
+    }
+
+    /* ── FUNDO ESQUERDA (glow azul) ── */
+    .left-bg {
+        position: absolute;
+        inset: 0;
+        z-index: 1;
+        background:
+            radial-gradient(ellipse 60% 80% at 5% 55%, rgba(26,86,255,0.16) 0%, transparent 60%),
+            radial-gradient(ellipse 40% 50% at 35% 80%, rgba(67,197,255,0.07) 0%, transparent 55%);
+    }
+
+    /* ── TOPO: logo + social ── */
+    .top-bar {
+        position: absolute;
+        top: 0; left: 0; right: 0;
+        z-index: 10;
+        padding: 26px 36px 26px 64px;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+    }
+
+    .logo {
+        height: 24px;
+        opacity: 0.85;
+        filter: drop-shadow(0 0 10px rgba(67,197,255,0.35));
+    }
+
+    .top-right {
+        display: flex;
+        align-items: center;
+        gap: 14px;
+    }
+
+    .badge-colecao {
+        font-size: 9.5px;
+        font-weight: 700;
+        letter-spacing: 0.3em;
+        text-transform: uppercase;
+        color: #43C5FF;
+        border: 1px solid rgba(67,197,255,0.35);
+        padding: 0.45em 0.9em;
+        background: rgba(26,86,255,0.1);
+    }
+
+    .social-icons {
+        display: flex;
+        gap: 8px;
+        align-items: center;
+    }
+
+    .social-icons span {
+        width: 26px; height: 26px;
+        border: 1px solid rgba(255,255,255,0.18);
+        display: flex; align-items: center; justify-content: center;
+        font-size: 9px; font-weight: 700; letter-spacing: 0.02em;
+        color: rgba(255,255,255,0.45);
+    }
+
+    /* ── COPY ESQUERDA ── */
+    .copy {
+        position: absolute;
+        left: 64px;
+        top: 50%;
+        transform: translateY(-50%);
+        z-index: 10;
+        max-width: 600px;
+    }
+
+    .label-top {
+        font-size: 10px;
+        font-weight: 700;
+        letter-spacing: 0.36em;
+        text-transform: uppercase;
+        color: rgba(255,255,255,0.35);
+        margin-bottom: 4px;
+        display: block;
+    }
+
+    /* tipografia mista: script + impact */
+    .t-script {
+        display: block;
+        font-family: 'Playfair Display', Georgia, serif;
+        font-style: italic;
+        font-size: 92px;
+        line-height: 1;
+        color: rgba(255,255,255,0.9);
+        letter-spacing: -0.01em;
+    }
+
+    .t-bold {
+        display: block;
+        font-family: 'Bebas Neue', Impact, sans-serif;
+        font-size: 178px;
+        line-height: 0.82;
+        letter-spacing: 0.01em;
+        color: #fff;
+        text-shadow:
+            2px 2px 0 #1a56ff,
+            4px 4px 0 #1340c8,
+            6px 6px 0 #0c2c96,
+            8px 8px 0 #071a60,
+            10px 10px 22px rgba(0,0,0,0.95);
+    }
+
+    .discount-tag {
+        display: inline-flex;
+        align-items: center;
+        gap: 14px;
+        margin-top: 20px;
+        border: 1px solid rgba(255,255,255,0.2);
+        padding: 6px 14px;
+    }
+
+    .discount-tag .label {
+        font-size: 9px;
+        font-weight: 700;
+        letter-spacing: 0.28em;
+        text-transform: uppercase;
+        color: rgba(255,255,255,0.38);
+    }
+
+    .discount-tag .value {
+        font-family: 'Bebas Neue', sans-serif;
+        font-size: 22px;
+        color: #43C5FF;
+        letter-spacing: 0.04em;
+    }
+
+    /* ── CTA ── */
+    .cta-btn {
+        display: inline-block;
+        margin-top: 22px;
+        background: #fff;
+        color: #080808;
+        font-size: 11px;
+        font-weight: 900;
+        letter-spacing: 0.24em;
+        text-transform: uppercase;
+        padding: 14px 40px;
+        text-decoration: none;
+        transition: background 0.2s, color 0.2s;
+    }
+    .cta-btn:hover { background: #43C5FF; }
+
+    /* ── RODAPÉ ── */
+    .footer-bar {
+        position: absolute;
+        bottom: 22px;
+        left: 64px;
+        right: 36px;
+        z-index: 10;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+    }
+
+    .site-url {
+        font-size: 9.5px;
+        font-weight: 600;
+        letter-spacing: 0.24em;
+        text-transform: uppercase;
+        color: rgba(255,255,255,0.18);
+    }
+
+    .date-tag {
+        font-family: 'Courier New', monospace;
+        font-size: 10px;
+        letter-spacing: 0.22em;
+        text-transform: uppercase;
+        color: rgba(67,197,255,0.5);
+    }
+
+    /* grain */
+    .grain {
+        position: absolute;
+        inset: 0; z-index: 50;
+        opacity: 0.04; pointer-events: none;
+        background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='300' height='300'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.75' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='300' height='300' filter='url(%23n)'/%3E%3C/svg%3E");
+        background-size: 200px 200px;
+    }
+</style>
+</head>
+<body>
+<div class="banner">
+
+    <div class="left-bg"></div>
+
+    <div class="photo-zone">
+        <img src="PNG/ChatGPT Image 15 de jun. de 2026, 20_44_26.png" alt="Running Beat Coleção">
+        <div class="photo-fade"></div>
+    </div>
+
+    <div class="top-bar">
+        <img class="logo" src="TRANSPARENTE/Logo horizontal2.png" alt="Running Beat">
+        <div class="top-right">
+            <span class="badge-colecao">Nova Coleção</span>
+            <div class="social-icons">
+                <span>IG</span>
+                <span>TT</span>
+                <span>YT</span>
+            </div>
+        </div>
+    </div>
+
+    <div class="copy">
+        <span class="label-top">Running Beat · Loja Oficial</span>
+        <span class="t-script">Primeira</span>
+        <span class="t-bold">Coleção</span>
+        <div class="discount-tag">
+            <span class="label">Lançamento</span>
+            <span class="value">08 · 08</span>
+            <span class="label">Uberlândia</span>
+        </div>
+        <br>
+        <a class="cta-btn" href="#">Ver Coleção</a>
+    </div>
+
+    <div class="footer-bar">
+        <span class="site-url">runningbeat.com.br</span>
+        <span class="date-tag">F*da-se o Pace</span>
+    </div>
+
+    <div class="grain"></div>
+</div>
+</body>
+</html>
