@@ -1,9 +1,5 @@
 RewriteEngine On
 
-# Força www como padrão (redireciona dominio.com.br -> www.dominio.com.br)
-RewriteCond %{HTTP_HOST} !^www\. [NC]
-RewriteRule ^ https://www.%{HTTP_HOST}%{REQUEST_URI} [L,R=301]
-
 # Redireciona /pagina.html -> /pagina (URL limpa)
 RewriteCond %{THE_REQUEST} /([^.]+)\.html[\s?] [NC]
 RewriteRule ^ /%1 [NC,L,R=301]
