@@ -1333,30 +1333,16 @@
         <h2 class="footer-headline reveal">Faça parte do<br><span>movimento</span></h2>
         <p class="footer-sub reveal">Quer saber a data e o local do próximo evento em primeira mão? Cadastre-se abaixo.</p>
 
-        <!--
-            CONFIGURAÇÃO DO FORMULÁRIO (Google Forms):
-            1. Crie um Google Form com 2 perguntas: "Nome" e "E-mail".
-            2. No Form, clique nos 3 pontinhos > "Obter link pré-preenchido".
-            3. Preencha os campos com qualquer valor e clique em "Obter link".
-            4. O link gerado terá algo como:
-               https://docs.google.com/forms/d/e/XXXXXXX/viewform?usp=pp_url&entry.111111=NOME&entry.222222=EMAIL
-            5. Substitua abaixo:
-               - YOUR_FORM_ID  -> o trecho "XXXXXXX" da URL (entre /d/e/ e /viewform)
-               - entry.NOME_ID -> o "entry.111111" referente ao campo Nome
-               - entry.EMAIL_ID -> o "entry.222222" referente ao campo E-mail
-        -->
-        <form class="signup-form reveal" id="signup-form"
-              action="https://docs.google.com/forms/d/e/YOUR_FORM_ID/formResponse"
-              method="POST" target="hidden_iframe">
-            <input type="text" name="entry.NOME_ID" placeholder="Seu nome" required>
-            <input type="email" name="entry.EMAIL_ID" placeholder="Seu e-mail" required>
+        <form class="signup-form reveal" id="signup-form" action="enviar-cadastro.php" method="POST">
+            <input type="text" name="nome" placeholder="Seu nome" required>
+            <input type="email" name="email" placeholder="Seu e-mail" required>
             <button type="submit">
                 Quero saber primeiro
                 <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg>
             </button>
         </form>
-        <iframe name="hidden_iframe" style="display:none;" title="form-target"></iframe>
         <p class="signup-msg reveal" id="signup-msg" style="display:none;">Cadastro feito! Você vai ser avisado(a) assim que tivermos novidades do próximo evento. 🏃</p>
+        <p class="signup-msg" id="signup-error" style="display:none; color:#ff6b6b;">Não foi possível enviar agora. Tente novamente em instantes.</p>
         <p class="signup-disclaimer reveal">Sem spam. Só os avisos importantes da Running Beat.</p>
 
         <div class="footer-links reveal">
@@ -1392,13 +1378,30 @@
 
         // ── Signup form feedback
         (function () {
-            const form = document.getElementById('signup-form');
-            const msg  = document.getElementById('signup-msg');
-            form.addEventListener('submit', function () {
-                setTimeout(function () {
-                    form.style.display = 'none';
-                    msg.style.display = 'block';
-                }, 600);
+            const form  = document.getElementById('signup-form');
+            const msg   = document.getElementById('signup-msg');
+            const error = document.getElementById('signup-error');
+
+            form.addEventListener('submit', function (e) {
+                e.preventDefault();
+                error.style.display = 'none';
+
+                fetch(form.action, {
+                    method: 'POST',
+                    body: new FormData(form)
+                })
+                    .then(function (res) { return res.json(); })
+                    .then(function (data) {
+                        if (data.ok) {
+                            form.style.display = 'none';
+                            msg.style.display = 'block';
+                        } else {
+                            error.style.display = 'block';
+                        }
+                    })
+                    .catch(function () {
+                        error.style.display = 'block';
+                    });
             });
         })();
 
