@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <title>Running Beat — Banner Loja</title>
-<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
 <style>
     * { margin:0; padding:0; box-sizing:border-box; }
     html, body { background:#111; }
@@ -12,186 +12,163 @@
     .banner {
         position: relative;
         width: 1440px;
-        height: 600px;
-        background: #0a0a0a;
+        height: 610px;
+        background: #000;
         overflow: hidden;
         color: #fff;
         font-family: 'Inter', sans-serif;
     }
 
-    /* ── FOTO DO MODELO (ocupa a direita, sem clip-path) ── */
+    /* ══════════ ZONA DIREITA: pista + fumaça + modelo ══════════ */
     .photo-zone {
         position: absolute;
         right: 0; top: 0; bottom: 0;
-        width: 68%;
-        background: #2a2a2a;
-        z-index: 2;
+        width: 56%;
+        background: #060608;
         overflow: hidden;
+        z-index: 2;
     }
+
+    /* pista (linhas de chão) */
+    .track-lines {
+        position: absolute;
+        left: 0; right: 0; bottom: 0;
+        height: 42%;
+        background:
+            repeating-linear-gradient(100deg,
+                transparent 0px, transparent 86px,
+                rgba(255,255,255,0.5) 86px, rgba(255,255,255,0.5) 90px,
+                transparent 90px, transparent 176px);
+        opacity: 0.5;
+        transform: perspective(360px) rotateX(58deg);
+        transform-origin: bottom;
+    }
+
+    .track-floor {
+        position: absolute;
+        left: 0; right: 0; bottom: 0;
+        height: 46%;
+        background: linear-gradient(to top, #14151a 0%, #0a0a0c 70%, transparent 100%);
+    }
+
+    /* fumaça azul */
+    .smoke {
+        position: absolute;
+        inset: 0;
+    }
+    .smoke span {
+        position: absolute;
+        border-radius: 50%;
+        filter: blur(40px);
+        background: radial-gradient(circle, rgba(67,197,255,0.55) 0%, rgba(26,86,255,0.25) 45%, transparent 75%);
+    }
+    .smoke .s1 { width: 420px; height: 420px; right: -60px;  top: 18%;  }
+    .smoke .s2 { width: 320px; height: 320px; right: 40px;   top: 38%;  opacity: 0.7; }
+    .smoke .s3 { width: 260px; height: 260px; right: 140px;  top: 55%;  opacity: 0.55; }
 
     .photo-zone img {
         position: absolute;
         bottom: 0;
-        right: 8%;
-        height: 110%;
+        left: 50%;
+        transform: translateX(-50%);
+        height: 102%;
         object-fit: contain;
         object-position: bottom center;
-        /* escurece o modelo para integrar ao fundo dark */
-        filter: brightness(0.68) contrast(1.12) saturate(0.75);
+        z-index: 3;
+        filter: contrast(1.1) brightness(0.92) saturate(0.95);
     }
 
-    /* gradiente que cobre o fundo da foto e funde com o dark */
-    .photo-overlay {
+    /* funde a borda esquerda da foto com a zona preta */
+    .photo-fade {
         position: absolute;
         inset: 0;
         z-index: 4;
         background:
-            /* funde esquerda com o fundo dark */
-            linear-gradient(to right, #0a0a0a 0%, rgba(10,10,10,0.88) 14%, rgba(10,10,10,0.45) 32%, rgba(10,10,10,0.1) 52%, transparent 70%),
-            /* vinheta topo */
-            linear-gradient(to bottom, rgba(10,10,10,0.6) 0%, transparent 22%),
-            /* vinheta base */
-            linear-gradient(to top, #0a0a0a 0%, rgba(10,10,10,0.4) 18%, transparent 35%),
-            /* vinheta direita */
-            linear-gradient(to left, rgba(10,10,10,0.45) 0%, transparent 30%);
+            linear-gradient(to right, #000 0%, rgba(0,0,0,0.7) 10%, transparent 26%),
+            linear-gradient(to top, #000 0%, transparent 16%),
+            linear-gradient(to bottom, rgba(0,0,0,0.55) 0%, transparent 18%);
     }
 
-    /* glow azul atmosférico atrás do modelo */
-    .photo-glow {
+    /* ══════════ FAIXAS DIAGONAIS AZUIS ══════════ */
+    .stripe {
         position: absolute;
-        inset: 0;
-        z-index: 3;
-        background: radial-gradient(ellipse 55% 70% at 72% 50%, rgba(26,86,255,0.14) 0%, transparent 65%);
+        top: -8%;
+        bottom: -8%;
+        width: 26px;
+        background: #1a56ff;
+        transform: skewX(-12deg);
+        z-index: 5;
     }
+    .stripe-1 { left: 44%; }
+    .stripe-2 { left: 47.8%; width: 14px; }
 
-    /* ── TEXTO ESQUERDA ── */
+    /* ══════════ ZONA ESQUERDA: copy ══════════ */
     .copy {
         position: absolute;
         left: 68px;
         top: 50%;
-        transform: translateY(-52%);
+        transform: translateY(-50%);
         z-index: 10;
-        max-width: 650px;
+        max-width: 600px;
     }
 
     .eyebrow {
         display: inline-flex;
         align-items: center;
-        gap: 10px;
-        font-size: 10.5px;
+        gap: 12px;
+        font-size: 11px;
         font-weight: 700;
-        letter-spacing: 0.38em;
+        letter-spacing: 0.32em;
         text-transform: uppercase;
-        color: rgba(255,255,255,0.38);
-        margin-bottom: 14px;
-    }
-    .eyebrow::before {
-        content: '';
-        width: 22px; height: 1px;
-        background: #1a56ff;
-        flex-shrink: 0;
+        color: #ffffff;
+        margin-bottom: 22px;
     }
 
     .title {
-        font-family: 'Bebas Neue', Impact, sans-serif;
-        line-height: 0.85;
-        letter-spacing: 0.01em;
+        font-family: 'Inter', sans-serif;
+        font-weight: 900;
+        line-height: 0.92;
+        letter-spacing: -0.01em;
+        text-transform: uppercase;
     }
 
-    .t1 {
+    .t1, .t2 {
         display: block;
-        font-size: 158px;
-        color: #ffffff;
-        text-shadow:
-            2px 2px 0 #1a56ff,
-            4px 4px 0 #1340c8,
-            6px 6px 0 #0c2c96,
-            8px 8px 0 #071a60,
-            10px 10px 22px rgba(0,0,0,0.95);
+        font-size: 112px;
     }
 
-    .t2 {
-        display: block;
-        font-size: 158px;
-        color: #43C5FF;
-        text-shadow:
-            2px 2px 0 #1a56ff,
-            4px 4px 0 #1340c8,
-            6px 6px 0 #0c2c96,
-            8px 8px 0 #071a60,
-            10px 10px 22px rgba(0,0,0,0.95),
-            0 0 80px rgba(67,197,255,0.18);
-    }
+    .t1 { color: #ffffff; }
+
+    .t2 { color: #ffffff; }
+    .t2 .accent { color: #1a56ff; }
 
     .tagline {
-        margin-top: 16px;
-        font-size: 13px;
-        font-weight: 600;
-        letter-spacing: 0.14em;
-        text-transform: uppercase;
-        color: rgba(255,255,255,0.35);
+        margin-top: 26px;
+        font-size: 17px;
+        font-weight: 400;
+        color: rgba(255,255,255,0.65);
+        max-width: 380px;
     }
 
     .cta-btn {
         display: inline-block;
-        margin-top: 26px;
+        margin-top: 38px;
         background: #1a56ff;
-        color: #fff;
-        font-size: 12px;
+        color: #000;
+        font-size: 13px;
         font-weight: 800;
-        letter-spacing: 0.22em;
+        letter-spacing: 0.18em;
         text-transform: uppercase;
-        padding: 14px 36px;
+        padding: 16px 38px;
         text-decoration: none;
-        transition: background 0.2s, color 0.2s;
     }
-    .cta-btn:hover { background: #43C5FF; color: #000; }
-
-    /* ── BADGE ── */
-    .badge {
-        position: absolute;
-        top: 28px;
-        right: 36px;
-        z-index: 12;
-        border: 1px solid rgba(67,197,255,0.35);
-        color: rgba(67,197,255,0.7);
-        font-family: 'Courier New', monospace;
-        font-size: 10px;
-        letter-spacing: 0.26em;
-        text-transform: uppercase;
-        padding: 0.5em 1.1em;
-        background: rgba(10,10,10,0.7);
-    }
-
-    /* ── LOGO ── */
-    .logo {
-        position: absolute;
-        top: 24px;
-        left: 68px;
-        z-index: 12;
-        height: 26px;
-        opacity: 0.82;
-        filter: drop-shadow(0 0 10px rgba(67,197,255,0.3));
-    }
-
-    /* ── URL rodapé ── */
-    .bottom-info {
-        position: absolute;
-        bottom: 24px;
-        left: 68px;
-        z-index: 12;
-        font-size: 10px;
-        font-weight: 600;
-        letter-spacing: 0.22em;
-        text-transform: uppercase;
-        color: rgba(255,255,255,0.18);
-    }
+    .cta-btn:hover { background: #43C5FF; }
 
     /* grain */
     .grain {
         position: absolute;
         inset: 0; z-index: 50;
-        opacity: 0.045; pointer-events: none;
+        opacity: 0.04; pointer-events: none;
         background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='300' height='300'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.75' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='300' height='300' filter='url(%23n)'/%3E%3C/svg%3E");
         background-size: 200px 200px;
     }
@@ -201,24 +178,29 @@
 <div class="banner">
 
     <div class="photo-zone">
+        <div class="track-floor"></div>
+        <div class="track-lines"></div>
+        <div class="smoke">
+            <span class="s1"></span>
+            <span class="s2"></span>
+            <span class="s3"></span>
+        </div>
         <img src="PNG/modelo1.png" alt="Modelo Running Beat">
-        <div class="photo-glow"></div>
-        <div class="photo-overlay"></div>
+        <div class="photo-fade"></div>
     </div>
+
+    <div class="stripe stripe-1"></div>
+    <div class="stripe stripe-2"></div>
 
     <div class="copy">
-        <span class="eyebrow">Running Beat · Loja Oficial</span>
+        <span class="eyebrow">Primeira Coleção · Running Beat</span>
         <div class="title">
-            <span class="t1">Primeira</span>
-            <span class="t2">Coleção</span>
+            <span class="t1">F*da-se</span>
+            <span class="t2">O <span class="accent">Pace</span></span>
         </div>
-        <p class="tagline">F*da-se o Pace. Vista o movimento.</p>
-        <a class="cta-btn" href="#">Ver coleção</a>
+        <p class="tagline">Quem tem ritmo não precisa de pace.</p>
+        <a class="cta-btn" href="#">Ver coleção →</a>
     </div>
-
-    <div class="badge">08.08 · Uberlândia, MG</div>
-    <img class="logo" src="TRANSPARENTE/Logo horizontal2.png" alt="Running Beat">
-    <p class="bottom-info">runningbeat.com.br</p>
 
     <div class="grain"></div>
 </div>
