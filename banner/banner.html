@@ -77,33 +77,54 @@
     }
 
     /* ── ZONA DIREITA ── */
+    /* clip-path em coordenadas locais da própria caixa (45% do banner, ancorada à direita),
+       recalculado para coincidir exatamente com a diagonal real do banner (78% topo / 72% base) */
     .zone-right {
         position: absolute;
         right: 0; top: 0;
         width: 45%; height: 100%;
-        background: radial-gradient(ellipse at center, #091428 0%, #0a0a0a 70%);
+        background: #0a0a0a;
         z-index: 1;
         overflow: hidden;
+        clip-path: polygon(51.11% 0, 100% 0, 100% 100%, 37.78% 100%);
     }
 
-    /* divisória diagonal entre as duas zonas (posicionada na costura, relativa ao banner) */
+    /* pista de corrida noturna ao fundo */
+    .track-bg {
+        position: absolute;
+        inset: 0;
+        background-image: url('https://images.unsplash.com/photo-1552674605-db6ffd4facb5?w=800');
+        background-size: cover;
+        background-position: center;
+        opacity: 0.3;
+        z-index: 0;
+    }
+
+    /* gradiente azul escuro sobre a pista */
+    .track-tint {
+        position: absolute;
+        inset: 0;
+        background: radial-gradient(ellipse at center, #091428 0%, #0a0a0a 70%);
+        mix-blend-mode: multiply;
+        z-index: 1;
+    }
+
+    /* divisória diagonal entre as duas zonas — faixa de 8px coincidindo exatamente
+       com a mesma diagonal (78% topo / 72% base) usada nos clip-paths das zonas */
     .divider {
         position: absolute;
-        top: -6%;
-        left: 55%;
-        width: 6px;
-        height: 112%;
+        inset: 0;
         background: #1a56ff;
-        transform: rotate(-8deg);
-        transform-origin: top;
+        clip-path: polygon(77.71% 0, 78.29% 0, 72.29% 100%, 71.71% 100%);
         z-index: 2;
+        pointer-events: none;
     }
 
-    /* luz ambiente azul atrás do modelo */
+    /* luz/fumaça azul atrás do modelo */
     .model-glow {
         position: absolute;
         inset: 0;
-        background: radial-gradient(ellipse 500px 600px at center, rgba(26,86,255,0.22) 0%, transparent 70%);
+        background: radial-gradient(ellipse 380px 480px at 60% 55%, rgba(26,86,255,0.28) 0%, transparent 65%);
         z-index: 2;
         pointer-events: none;
     }
@@ -121,26 +142,28 @@
 
     .logo {
         position: absolute;
-        top: 24px;
-        right: 24px;
-        width: 120px;
+        top: 32px;
+        right: 32px;
+        width: 180px;
         height: auto;
-        opacity: 0.9;
+        opacity: 0.95;
         mix-blend-mode: screen;
+        filter: drop-shadow(0 0 12px rgba(26,86,255,0.6));
         z-index: 4;
     }
 
     /* ── ZONA ESQUERDA ── */
+    /* full-width, com clip-path nas mesmas coordenadas do banner (78%/72%) —
+       a caixa é transparente, então isso só garante que coincide com a costura real */
     .zone-left {
         position: absolute;
-        left: 0; top: 0;
-        width: 55%; height: 100%;
+        inset: 0;
         padding-left: 80px;
         display: flex;
         flex-direction: column;
         justify-content: center;
         z-index: 5;
-        clip-path: polygon(0 0, 100% 0, 85% 100%, 0% 100%);
+        clip-path: polygon(0 0, 78% 0, 72% 100%, 0 100%);
     }
 
     .badge {
@@ -208,6 +231,8 @@
     <div class="eq-lines"></div>
 
     <div class="zone-right">
+        <div class="track-bg"></div>
+        <div class="track-tint"></div>
         <div class="model-glow"></div>
         <img class="modelo" src="modelo.png" alt="Modelo Running Beat">
         <img class="logo" src="logo.png" alt="Running Beat">
