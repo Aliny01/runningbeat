@@ -81,37 +81,39 @@
         position: absolute;
         right: 0; top: 0;
         width: 45%; height: 100%;
-        background: linear-gradient(to right, #0a1628, #0a0a0a);
+        background: radial-gradient(ellipse at center, #091428 0%, #0a0a0a 70%);
         z-index: 1;
         overflow: hidden;
     }
 
+    /* divisória diagonal entre as duas zonas (posicionada na costura, relativa ao banner) */
     .divider {
         position: absolute;
-        top: -10%;
-        left: 54%;
-        width: 12px;
-        height: 120%;
+        top: -6%;
+        left: 55%;
+        width: 6px;
+        height: 112%;
         background: #1a56ff;
         transform: rotate(-8deg);
+        transform-origin: top;
         z-index: 2;
     }
 
+    /* luz ambiente azul atrás do modelo */
     .model-glow {
         position: absolute;
-        left: 50%; top: 52%;
-        width: 320px; height: 320px;
-        transform: translate(-50%, -50%);
-        background: radial-gradient(circle, rgba(26,86,255,0.12) 0%, transparent 70%);
+        inset: 0;
+        background: radial-gradient(ellipse 500px 600px at center, rgba(26,86,255,0.22) 0%, transparent 70%);
         z-index: 2;
+        pointer-events: none;
     }
 
     .modelo {
         position: absolute;
         left: 50%;
-        bottom: 0;
-        transform: translateX(-50%);
-        height: 500px;
+        top: 50%;
+        transform: translate(-50%, -50%);
+        height: 92%;
         width: auto;
         z-index: 3;
         filter: drop-shadow(0px 20px 40px rgba(26,86,255,0.3));
@@ -138,6 +140,7 @@
         flex-direction: column;
         justify-content: center;
         z-index: 5;
+        clip-path: polygon(0 0, 100% 0, 85% 100%, 0% 100%);
     }
 
     .badge {
@@ -173,7 +176,7 @@
     }
 
     .tagline {
-        margin-top: 20px;
+        margin-top: 36px;
         font-size: 14px;
         font-style: italic;
         color: #ffffff;
@@ -205,11 +208,12 @@
     <div class="eq-lines"></div>
 
     <div class="zone-right">
-        <div class="divider"></div>
         <div class="model-glow"></div>
         <img class="modelo" src="modelo.png" alt="Modelo Running Beat">
         <img class="logo" src="logo.png" alt="Running Beat">
     </div>
+
+    <div class="divider"></div>
 
     <div class="zone-left">
         <span class="badge">Primeira Coleção · Running Beat</span>
